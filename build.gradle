@@ -70,7 +70,7 @@ dependencies {
 		exclude(group: "net.fabricmc")
 	}
 
-	modImplementation include('eu.pb4:factorytools:0.7.1-dev4+1.21.6')
+	modImplementation include('eu.pb4:factorytools:0.7.1+1.21.6')
 	modImplementation include('eu.pb4:sgui:1.10.0+1.21.6')
 	modImplementation 'eu.pb4:polymer-core:0.13.3+1.21.6'
 	modImplementation 'eu.pb4:polymer-blocks:0.13.3+1.21.6'
