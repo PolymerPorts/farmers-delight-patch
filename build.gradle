@@ -1,0 +1,158 @@
+plugins {
+	id 'fabric-loom' version '1.10.+'
+	id 'maven-publish'
+	id "com.modrinth.minotaur" version "2.+"
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
+
+loom {
+	mixin {
+		useLegacyMixinAp = false
+	}
+}
+
+repositories {
+	// Add repositories to retrieve artifacts from in here.
+	// You should only use this when depending on other mods because
+	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
+	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
+	// for more information about repositories.
+    maven { url "https://api.modrinth.com/maven/" }
+	maven { url 'https://maven.nucleoid.xyz' }
+	maven { url "https://maven.kneelawk.com/releases/" }
+	maven { url "https://maven.isxander.dev/releases" }
+	maven { url "https://jitpack.io" }
+
+	repositories {
+		maven {
+			url "https://maven.theepicblock.nl"
+			content { includeGroup("nl.theepicblock") }
+		}
+	}
+	maven {
+		name = "Greenhouse Maven"
+		url = 'https://repo.greenhouse.house/releases/'
+	}
+	maven { url "https://mvn.devos.one/releases/" } // Porting Lib
+	maven {
+		url "https://maven.jamieswhiteshirt.com/libs-release" // Reach Entity Attributes (Required by Porting Lib)
+		content {
+			includeGroup "com.jamieswhiteshirt"
+		}
+	}
+	maven {
+		url "https://jitpack.io/" // Fabric ASM
+		content {
+			excludeGroup "io.github.fabricators_of_create"
+		}
+	}
+	maven { url = "https://maven.bawnorton.com/releases" }
+
+	mavenLocal()
+}
+
+dependencies {
+	// To change the versions see the gradle.properties file
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+	// Fabric API. This is technically optional, but you probably want it anyway.
+	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+
+	modImplementation("vectorwing:FarmersDelight:1.21.6-3.2.3+refabricated") {
+		exclude(group: "net.fabricmc")
+	}
+
+	modImplementation include('eu.pb4:factorytools:0.7.1-dev4+1.21.6')
+	modImplementation include('eu.pb4:sgui:1.10.0+1.21.6')
+	modImplementation 'eu.pb4:polymer-core:0.13.3-dev4+1.21.6'
+	modImplementation 'eu.pb4:polymer-blocks:0.13.2+1.21.6'
+	modImplementation 'eu.pb4:polymer-resource-pack:0.13.2+1.21.6'
+	modImplementation 'eu.pb4:polymer-resource-pack-extras:0.13.2+1.21.6'
+	modImplementation 'eu.pb4:polymer-autohost:0.13.2+1.21.6'
+	modImplementation 'eu.pb4:polymer-virtual-entity:0.13.2+1.21.6'
+
+	modCompileOnly 'maven.modrinth:polydex:1.6.0+1.21.6'
+
+
+	include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.3.3")))
+
+	// Uncomment the following line to enable the deprecated Fabric API modules. 
+	// These are included in the Fabric API production distribution and allow you to update your mod to the latest modules at a later more convenient time.
+
+	// modImplementation "net.fabricmc.fabric-api:fabric-api-deprecated:${project.fabric_version}"
+}
+
+processResources {
+	inputs.property "version", project.version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": project.version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 21
+}
+
+java {
+	// Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+	// if it is present.
+	// If you remove this line, sources will not be generated.
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
+}
+
+jar {
+	from("LICENSE") {
+		rename { "${it}_${project.base.archivesName.get()}"}
+	}
+}
+
+// configure the maven publication
+publishing {
+	publications {
+		mavenJava(MavenPublication) {
+			from components.java
+		}
+	}
+
+	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
+	repositories {
+		// Add repositories to publish to here.
+		// Notice: This block does NOT have the same function as the block in the top level.
+		// The repositories here will be used for publishing your artifact, not for
+		// retrieving dependencies.
+	}
+}
+
+if (System.getenv("MODRINTH")) {
+	modrinth {
+		token = System.getenv("MODRINTH")
+		projectId = 'TE3NCFiY'// The ID of your modrinth project, slugs will not work.
+		versionNumber = "" + version // The version of the mod to upload.
+		versionType = "beta"
+		uploadFile = remapJar // This links to a task that builds your mod jar and sets "uploadFile" to the mod jar.
+		gameVersions = [((String) project.minecraft_version)]
+		changelog = System.getenv("CHANGELOG")
+		loaders = ["fabric"/*, "quilt"*/]
+
+		dependencies {
+			required.project "farmers-delight-refabricated"
+			required.project "polymer"
+		}
+	}
+
+	remapJar {
+		finalizedBy project.tasks.modrinth
+	}
+}

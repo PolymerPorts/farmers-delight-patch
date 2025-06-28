@@ -1,0 +1,35 @@
+{
+	"schemaVersion": 1,
+	"id": "farmers-delight-polymer-patch",
+	"version": "${version}",
+	"name": "Polymer Patch for Farmers Delight",
+	"description": "Polymer Patch for Farmers Delight: Refabricated",
+	"authors": [
+		"Patbox"
+	],
+	"contact": {
+		"homepage": "https://pb4.eu",
+		"sources": "https://github.com/PolymerPorts/farmers-delight-patch"
+	},
+	"license": "LGPLv3",
+	"icon": "assets/farmers-delight-patch/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+          "eu.pb4.farmersdelightpatch.impl.FarmersDelightPolymerPatch"
+		],
+		"mixinsquared-adjuster": [
+			"eu.pb4.farmersdelightpatch.mixin.FarmersDelightPatchMixinAnnotationAdjuster"
+		]
+	},
+	"mixins": [
+		"farmers-delight-polymer-patch.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.4",
+		"farmersdelight": "*",
+		"minecraft": ">=1.21.6-",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}
