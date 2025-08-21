@@ -48,6 +48,12 @@ public class CookingPotUi extends SimpleGui {
         this.updateState();
     }
 
+    @Override
+    public void onScreenHandlerClosed() {
+        super.onScreenHandlerClosed();
+        this.wrapped.onClosed(this.player);
+    }
+
     private void updateState() {
         this.setSlot(4, GuiTextures.PROGRESS_COOKING_POT.getCeil(this.wrapped.getCookProgressionScaled() / 24f));
         this.setSlot(2 + 9 * 2, (this.wrapped.isHeated() ? GuiTextures.HEATED.get() : GuiTextures.EMPTY_BUILDER.get())

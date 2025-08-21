@@ -1,7 +1,7 @@
 package eu.pb4.farmersdelightpatch.impl.model;
 
+import eu.pb4.factorytools.api.block.model.generic.BlockStateModel;
 import eu.pb4.factorytools.api.virtualentity.ItemDisplayElementUtil;
-import eu.pb4.farmersdelightpatch.impl.model.generic.BlockStateModel;
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.CampfireBlock;
@@ -9,6 +9,7 @@ import net.minecraft.block.HorizontalFacingBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.Vec2f;
 import net.minecraft.util.math.Vec3d;
@@ -32,8 +33,8 @@ public class StoveModel extends BlockStateModel {
 
     private final ItemDisplayElement[] item= new ItemDisplayElement[6];
     private final Random rand = Random.create();
-    public StoveModel(BlockState state) {
-        super(state);
+    public StoveModel(BlockState state, BlockPos pos) {
+        super(state, pos, 3);
 
         for (int i = 0; i < 6; i++) {
             var item = this.item[i] = ItemDisplayElementUtil.createSimple();
@@ -45,7 +46,7 @@ public class StoveModel extends BlockStateModel {
             item.setPitch(-90);
         }
 
-        this.applyUpdates(state);
+        this.applyUpdates(state, pos);
         for (int i = 0; i < 6; i++) {
             this.addElement(this.item[i]);
         }
@@ -74,12 +75,13 @@ public class StoveModel extends BlockStateModel {
         }
     }
 
+
     @Override
-    protected void applyUpdates(BlockState blockState) {
+    protected void applyUpdates(BlockState blockState, BlockPos pos) {
+        super.applyUpdates(blockState, pos);
         for (var item : this.item) {
             item.setYaw(blockState.get(CuttingBoardBlock.FACING).getPositiveHorizontalDegrees());
         }
-        super.applyUpdates(blockState);
     }
 
     public void setItem(int i, ItemStack stack) {

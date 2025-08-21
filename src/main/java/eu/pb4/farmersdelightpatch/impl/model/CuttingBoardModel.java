@@ -1,7 +1,7 @@
 package eu.pb4.farmersdelightpatch.impl.model;
 
+import eu.pb4.factorytools.api.block.model.generic.BlockStateModel;
 import eu.pb4.factorytools.api.virtualentity.ItemDisplayElementUtil;
-import eu.pb4.farmersdelightpatch.impl.model.generic.BlockStateModel;
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.HoeItem;
@@ -9,6 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TridentItem;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RotationAxis;
 import net.minecraft.util.math.Vec3d;
@@ -19,19 +20,19 @@ import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 public class CuttingBoardModel extends BlockStateModel {
     private final ItemDisplayElement item = ItemDisplayElementUtil.createSimple();
     private boolean carved = false;
-    public CuttingBoardModel(BlockState state) {
-        super(state);
+    public CuttingBoardModel(BlockState state, BlockPos pos) {
+        super(state, pos, 3);
         this.item.setScale(new Vector3f(0.6f));
         this.item.setOffset(new Vec3d(0, -6.5f / 16, 0));
         this.item.setPitch(-90);
-        this.applyUpdates(state);
+        this.applyUpdates(state, pos);
         this.addElement(item);
     }
 
     @Override
-    protected void applyUpdates(BlockState blockState) {
+    protected void applyUpdates(BlockState blockState, BlockPos pos) {
         this.item.setYaw(blockState.get(CuttingBoardBlock.FACING).getPositiveHorizontalDegrees());
-        super.applyUpdates(blockState);
+        super.applyUpdates(blockState, pos);
     }
 
 

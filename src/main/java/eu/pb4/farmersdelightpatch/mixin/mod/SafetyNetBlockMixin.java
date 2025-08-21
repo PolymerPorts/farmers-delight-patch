@@ -2,8 +2,11 @@ package eu.pb4.farmersdelightpatch.mixin.mod;
 
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.PlayerPosition;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
+import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
+import net.minecraft.network.packet.s2c.play.PositionFlag;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.registry.Registries;
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -16,6 +19,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import vectorwing.farmersdelight.common.block.SafetyNetBlock;
 
 import java.util.Optional;
+import java.util.Set;
 
 @Mixin(SafetyNetBlock.class)
 public class SafetyNetBlockMixin {

@@ -1,13 +1,14 @@
 package eu.pb4.farmersdelightpatch.impl.model;
 
+import eu.pb4.factorytools.api.block.model.generic.BlockStateModel;
 import eu.pb4.factorytools.api.virtualentity.ItemDisplayElementUtil;
-import eu.pb4.farmersdelightpatch.impl.model.generic.BlockStateModel;
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.HoeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.TridentItem;
 import net.minecraft.registry.tag.ItemTags;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.random.Random;
@@ -17,8 +18,8 @@ import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
 
 public class SkilletModel extends BlockStateModel {
     private final ItemDisplayElement[] item = new ItemDisplayElement[5];
-    public SkilletModel(BlockState state) {
-        super(state);
+    public SkilletModel(BlockState state, BlockPos pos) {
+        super(state, pos, 3);
         var random = Random.create(187);
         for (int i = 0; i < 5; i++) {
             var item = this.item[i] = ItemDisplayElementUtil.createSimple();
@@ -29,18 +30,18 @@ public class SkilletModel extends BlockStateModel {
             item.setOffset(new Vec3d(xOffset, -6.5f / 16 + 0.03 * (i + 1), zOffset));
             item.setPitch(-90);
         }
-        this.applyUpdates(state);
+        this.applyUpdates(state, pos);
         for (var item : this.item) {
             this.addElement(item);
         }
     }
 
     @Override
-    protected void applyUpdates(BlockState blockState) {
+    protected void applyUpdates(BlockState blockState, BlockPos pos) {
         for (var item : this.item) {
             item.setYaw(blockState.get(CuttingBoardBlock.FACING).getPositiveHorizontalDegrees());
         }
-        super.applyUpdates(blockState);
+        super.applyUpdates(blockState, pos);
     }
 
 

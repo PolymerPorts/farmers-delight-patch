@@ -1,16 +1,16 @@
 package eu.pb4.farmersdelightpatch.mixin.mod;
 
 import eu.pb4.factorytools.api.block.FactoryBlock;
+import eu.pb4.factorytools.api.block.model.generic.BlockStateModelManager;
+import eu.pb4.factorytools.api.block.model.SignModel;
 import eu.pb4.farmersdelightpatch.impl.block.BaseFactoryBlock;
 import eu.pb4.farmersdelightpatch.impl.block.StateCopyFactoryBlock;
 import eu.pb4.farmersdelightpatch.impl.block.WaterloggableFactoryBlock;
 import eu.pb4.farmersdelightpatch.impl.item.PolyBaseItem;
 import eu.pb4.farmersdelightpatch.impl.item.PolySkilletItem;
 import eu.pb4.farmersdelightpatch.impl.model.CuttingBoardModel;
-import eu.pb4.farmersdelightpatch.impl.model.SignModel;
 import eu.pb4.farmersdelightpatch.impl.model.SkilletModel;
 import eu.pb4.farmersdelightpatch.impl.model.StoveModel;
-import eu.pb4.farmersdelightpatch.impl.model.generic.BlockStateModelManager;
 import eu.pb4.polymer.common.api.PolymerCommonUtils;
 import eu.pb4.polymer.core.api.block.PolymerBlock;
 import eu.pb4.polymer.core.api.block.PolymerBlockUtils;
@@ -23,7 +23,6 @@ import eu.pb4.polymer.core.api.other.PolymerSoundEvent;
 import eu.pb4.polymer.core.api.utils.PolymerSyncedObject;
 import eu.pb4.polymer.virtualentity.api.BlockWithElementHolder;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
 import net.minecraft.block.Waterloggable;
 import net.minecraft.block.entity.BlockEntityType;
 import net.minecraft.component.ComponentType;
@@ -38,12 +37,7 @@ import net.minecraft.recipe.book.RecipeBookCategory;
 import net.minecraft.recipe.display.RecipeDisplay;
 import net.minecraft.registry.Registries;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.Hand;
-import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -53,10 +47,11 @@ import vectorwing.farmersdelight.FarmersDelight;
 import vectorwing.farmersdelight.common.block.*;
 import vectorwing.farmersdelight.common.block.state.CanvasSign;
 import vectorwing.farmersdelight.refabricated.RegUtils;
-import xyz.nucleoid.packettweaker.PacketContext;
 
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+
+import static eu.pb4.farmersdelightpatch.impl.FarmersDelightPolymerPatch.id;
 
 @Mixin(RegUtils.class)
 public class RegUtilsMixin {
@@ -78,28 +73,28 @@ public class RegUtilsMixin {
         FactoryBlock polymerBlock;
 
         if (name.equals("canvas_rug")) {
-            polymerBlock = BaseFactoryBlock.TRIPWIRE_FLAT;
+            polymerBlock = BaseFactoryBlock.BOTTOM_TRAPDOOR;
         } else if (block instanceof CuttingBoardBlock) {
-            polymerBlock = BaseFactoryBlock.TRIPWIRE_FLAT.withModel(CuttingBoardModel::new);
+            polymerBlock = BaseFactoryBlock.BOTTOM_TRAPDOOR.withModel(CuttingBoardModel::new);
         } else if (block instanceof SkilletBlock) {
             polymerBlock = WaterloggableFactoryBlock.BOTTOM_TRAPDOOR.withModel(SkilletModel::new);
         } else if (block instanceof StoveBlock) {
             polymerBlock = BaseFactoryBlock.BARRIER.withModel(StoveModel::new).withTick(true);
         } else if (name.equals("half_tatami_mat") || name.equals("full_tatami_mat")) {
-            polymerBlock = BaseFactoryBlock.TRIPWIRE;
+            polymerBlock = BaseFactoryBlock.BOTTOM_TRAPDOOR;
         } else if (block instanceof CanvasSign canvasSign) {
             if (name.endsWith("wall_hanging_canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.HANGING_WALL_SIGN_DARK : StateCopyFactoryBlock.HANGING_WALL_SIGN;
-                SignModel.addBlock(name, block);
+                SignModel.setModel(block, id("block/" + name));
             } else if (name.endsWith("hanging_canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.HANGING_SIGN_DARK : StateCopyFactoryBlock.HANGING_SIGN;
-                SignModel.addBlock(name, block);
+                SignModel.setModel(block, id("block/" + name));
             } else if (name.endsWith("canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.SIGN_DARK : StateCopyFactoryBlock.SIGN;
-                SignModel.addBlock(name, block);
+                SignModel.setModel(block, id("block/" + name));
             } else if (name.endsWith("canvas_wall_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.WALL_SIGN_DARK : StateCopyFactoryBlock.WALL_SIGN;
-                SignModel.addBlock(name, block);
+                SignModel.setModel(block, id("block/" + name));
             } else {
                 polymerBlock = BaseFactoryBlock.SAPLING;
             }

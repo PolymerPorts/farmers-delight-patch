@@ -1,5 +1,7 @@
 package eu.pb4.farmersdelightpatch.impl.res;
 
+import eu.pb4.factorytools.api.block.model.generic.BlockStateModelManager;
+import eu.pb4.factorytools.api.resourcepack.ModelModifiers;
 import eu.pb4.polymer.resourcepack.api.AssetPaths;
 import eu.pb4.polymer.resourcepack.api.PolymerResourcePackUtils;
 import eu.pb4.polymer.resourcepack.api.ResourcePackBuilder;
@@ -11,10 +13,12 @@ import eu.pb4.polymer.resourcepack.extras.api.format.item.property.bool.CustomMo
 import eu.pb4.polymer.resourcepack.extras.api.format.model.ModelAsset;
 import eu.pb4.polymer.resourcepack.extras.api.format.model.ModelElement;
 import net.minecraft.util.DyeColor;
+import net.minecraft.util.Identifier;
 import net.minecraft.util.math.Vec3d;
 import vectorwing.farmersdelight.FarmersDelight;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Optional;
 
 import static eu.pb4.farmersdelightpatch.impl.FarmersDelightPolymerPatch.id;
@@ -61,6 +65,24 @@ public class ResourcePackGenerator {
             return bytes;
         }));
 
+        /*for (var entry : BlockStateModelManager.UV_LOCKED_MODELS.get("farmersdelight").entrySet()) {
+            for (var v : entry.getValue()) {
+                var suffix = "_uvlock_" + v.x() + "_" + v.y();
+                var modelId = v.model().withSuffixedPath(suffix);
+                var asset = ModelAsset.fromJson(new String(Objects.requireNonNull(builder.getData(AssetPaths.model(v.model()) + ".json")), StandardCharsets.UTF_8));
+
+                if (asset.parent().isPresent()) {
+                    var parentId = asset.parent().get();
+                    var parentAsset = ModelAsset.fromJson(new String(Objects.requireNonNull(builder.getDataOrSource(AssetPaths.model(parentId) + ".json")), StandardCharsets.UTF_8));
+                    builder.addData(AssetPaths.model("enderscape-patch", parentId.getPath() + suffix) + ".json",
+                            ModelModifiers.expandModelAndRotateUVLocked(parentAsset, Vec3d.ZERO, v.x(), v.y()));
+                    builder.addData(AssetPaths.model(modelId) + ".json",
+                            new ModelAsset(Optional.of(Identifier.of("enderscape-patch", parentId.getPath() + suffix)), asset.elements(),
+                                    asset.textures(), asset.display(), asset.guiLight(), asset.ambientOcclusion()).toBytes());
+                }
+            }
+        }*/
+
         var atlas = AtlasAsset.builder();
 
 
@@ -80,18 +102,16 @@ public class ResourcePackGenerator {
         atlas.add(new SingleAtlasSource(textureHanging, Optional.empty()));
 
         builder.addData(AssetPaths.blockModel(id(prefix + "canvas_sign")), ModelAsset.builder()
-                .parent(id("block/template_sign"))
+                .parent(Identifier.of("factorytools", "block_sign/template_sign"))
                 .texture("sign", textureRegular.toString()).build());
         builder.addData(AssetPaths.blockModel(id(prefix + "canvas_wall_sign")), ModelAsset.builder()
-                .parent(id("block/template_wall_sign"))
+                .parent(Identifier.of("factorytools", "block_sign/template_wall_sign"))
                 .texture("sign", textureRegular.toString()).build());
         builder.addData(AssetPaths.blockModel(id(prefix + "hanging_canvas_sign")), ModelAsset.builder()
-                .parent(id("block/template_hanging_sign"))
+                .parent(Identifier.of("factorytools", "block_sign/template_hanging_sign"))
                 .texture("sign", textureHanging.toString()).build());
         builder.addData(AssetPaths.blockModel(id(prefix + "wall_hanging_canvas_sign")), ModelAsset.builder()
-                .parent(id("block/template_wall_hanging_sign"))
+                .parent(Identifier.of("factorytools", "block_sign/template_wall_hanging_sign"))
                 .texture("sign", textureHanging.toString()).build());
     }
-
-    public record SlicedTexture(String path, int start, int stop, boolean reverse) {};
 }
