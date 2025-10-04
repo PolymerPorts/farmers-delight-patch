@@ -9,6 +9,7 @@ import net.minecraft.recipe.RecipeType;
 import net.minecraft.text.Text;
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 import vectorwing.farmersdelight.common.crafting.CuttingBoardRecipe;
+import vectorwing.farmersdelight.common.crafting.DoughRecipe;
 
 
 public class PolydexCompatImpl {
@@ -16,6 +17,7 @@ public class PolydexCompatImpl {
     public static void register() {
         PolydexPage.registerRecipeViewer(CookingPotRecipe.class, CookingPotRecipePage::new);
         PolydexPage.registerRecipeViewer(CuttingBoardRecipe.class, CuttingBoardRecipePage::new);
+        PolydexPage.registerRecipeViewer(DoughRecipe.class, DoughRecipePage::new);
     }
 
     public static GuiElement getButton(RecipeType<?> type) {

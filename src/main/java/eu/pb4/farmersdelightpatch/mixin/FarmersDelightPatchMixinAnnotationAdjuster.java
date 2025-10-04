@@ -11,8 +11,9 @@ import java.util.List;
 public class FarmersDelightPatchMixinAnnotationAdjuster implements MixinAnnotationAdjuster {
     @Override
     public AdjustableAnnotationNode adjust(List<String> targetClassNames, String mixinClassName, MethodNode method, AdjustableAnnotationNode annotation) {
-        if(!mixinClassName.equals("vectorwing.farmersdelight.common.mixin.refabricated.RecipeBookSettingsMixin")) return annotation;
-        if(!annotation.is(Inject.class)) return annotation;
+        if (mixinClassName.equals("vectorwing.farmersdelight.common.mixin.refabricated.ServerRecipeBookMixin")) return null;
+        if (!mixinClassName.equals("vectorwing.farmersdelight.common.mixin.refabricated.RecipeBookSettingsMixin")) return annotation;
+        if (!annotation.is(Inject.class)) return annotation;
         var node = annotation.as(AdjustableInjectNode.class);
         
         if(node.getMethod().getFirst().equals("<clinit>")) {

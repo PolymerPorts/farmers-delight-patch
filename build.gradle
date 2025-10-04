@@ -67,18 +67,18 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	//modImplementation("vectorwing:FarmersDelight:1.21.8-3.2.5+refabricated") {
-	modImplementation("maven.modrinth:farmers-delight-refabricated:1.21.8-3.2.5") {
+	modImplementation("maven.modrinth:farmers-delight-refabricated:1.21.8-3.3.0") {
 		exclude(group: "net.fabricmc")
 	}
 
 	modImplementation include('eu.pb4:factorytools:0.7.5+1.21.8')
 	modImplementation include('eu.pb4:sgui:1.10.2+1.21.8')
-	modImplementation 'eu.pb4:polymer-core:0.13.11+1.21.8'
-	modImplementation 'eu.pb4:polymer-blocks:0.13.11+1.21.8'
-	modImplementation 'eu.pb4:polymer-resource-pack:0.13.11+1.21.8'
-	modImplementation 'eu.pb4:polymer-resource-pack-extras:0.13.11+1.21.8'
-	modImplementation 'eu.pb4:polymer-autohost:0.13.11+1.21.8'
-	modImplementation 'eu.pb4:polymer-virtual-entity:0.13.11+1.21.8'
+	modImplementation 'eu.pb4:polymer-core:0.13.13+1.21.8'
+	modImplementation 'eu.pb4:polymer-blocks:0.13.13+1.21.8'
+	modImplementation 'eu.pb4:polymer-resource-pack:0.13.13+1.21.8'
+	modImplementation 'eu.pb4:polymer-resource-pack-extras:0.13.13+1.21.8'
+	modImplementation 'eu.pb4:polymer-autohost:0.13.13+1.21.8'
+	modImplementation 'eu.pb4:polymer-virtual-entity:0.13.13+1.21.8'
 
 	modCompileOnly 'maven.modrinth:polydex:1.6.0+1.21.6'
 
