@@ -14,6 +14,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.text.Style;
+import net.minecraft.text.StyleSpriteSource;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
@@ -38,7 +39,9 @@ public class UiResourceCreator {
     public static final String X32_MODEL = "farmers-delight-patch:sgui/button_32";
     public static final String X32_RIGHT_MODEL = "farmers-delight-patch:sgui/button_32_right";
 
-    public static final Style STYLE = Style.EMPTY.withColor(0xFFFFFF).withFont(id("gui"));
+    private static final StyleSpriteSource GUI_FONT = new StyleSpriteSource.Font(id("gui"));
+
+    public static final Style STYLE = Style.EMPTY.withColor(0xFFFFFF).withFont(GUI_FONT);
     private static final String ITEM_TEMPLATE = """
             {
               "parent": "|BASE|",
