@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.10.+'
+	id 'fabric-loom' version '1.11.+'
 	id 'maven-publish'
 	id "com.modrinth.minotaur" version "2.+"
 }
@@ -67,20 +67,20 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	//modImplementation("vectorwing:FarmersDelight:1.21.8-3.2.5+refabricated") {
-	modImplementation("maven.modrinth:farmers-delight-refabricated:1.21.8-3.3.0") {
+	modImplementation("maven.modrinth:farmers-delight-refabricated:1.21.10-3.3.1") {
 		exclude(group: "net.fabricmc")
 	}
 
-	modImplementation include('eu.pb4:factorytools:0.7.5+1.21.8')
-	modImplementation include('eu.pb4:sgui:1.10.2+1.21.8')
-	modImplementation 'eu.pb4:polymer-core:0.13.13+1.21.8'
-	modImplementation 'eu.pb4:polymer-blocks:0.13.13+1.21.8'
-	modImplementation 'eu.pb4:polymer-resource-pack:0.13.13+1.21.8'
-	modImplementation 'eu.pb4:polymer-resource-pack-extras:0.13.13+1.21.8'
-	modImplementation 'eu.pb4:polymer-autohost:0.13.13+1.21.8'
-	modImplementation 'eu.pb4:polymer-virtual-entity:0.13.13+1.21.8'
+	modImplementation include('eu.pb4:factorytools:0.8.1+1.21.9')
+	modImplementation include('eu.pb4:sgui:1.11.0+1.21.9')
+	modImplementation 'eu.pb4:polymer-core:0.14.2+1.21.9'
+	modImplementation 'eu.pb4:polymer-blocks:0.14.2+1.21.9'
+	modImplementation 'eu.pb4:polymer-resource-pack:0.14.2+1.21.9'
+	modImplementation 'eu.pb4:polymer-resource-pack-extras:0.14.2+1.21.9'
+	modImplementation 'eu.pb4:polymer-autohost:0.14.2+1.21.9'
+	modImplementation 'eu.pb4:polymer-virtual-entity:0.14.2+1.21.9'
 
-	modCompileOnly 'maven.modrinth:polydex:1.6.0+1.21.6'
+	modCompileOnly 'maven.modrinth:polydex:1.7.0+1.21.9-rc1'
 
 
 	include(implementation(annotationProcessor("com.github.bawnorton.mixinsquared:mixinsquared-fabric:0.3.3")))

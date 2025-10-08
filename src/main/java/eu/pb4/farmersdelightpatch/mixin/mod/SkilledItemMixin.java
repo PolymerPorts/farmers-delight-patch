@@ -3,7 +3,6 @@ package eu.pb4.farmersdelightpatch.mixin.mod;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.network.packet.s2c.play.ScreenHandlerSlotUpdateS2CPacket;
 import net.minecraft.screen.PlayerScreenHandler;
@@ -14,7 +13,6 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import vectorwing.farmersdelight.common.item.SkilletItem;
@@ -27,7 +25,7 @@ public class SkilledItemMixin {
         return PacketContext.get().getPlayer();
     }
 
-    @Redirect(method = "usageTick", at = @At(value = "FIELD", target = "Lnet/minecraft/world/World;isClient:Z"))
+    @Redirect(method = "usageTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;isClient()Z"))
     private boolean yesItsClient100Real(World instance) {
         return true;
     }
