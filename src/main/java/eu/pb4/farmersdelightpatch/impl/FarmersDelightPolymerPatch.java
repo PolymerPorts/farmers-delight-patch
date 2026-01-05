@@ -13,10 +13,11 @@ import eu.pb4.polymer.resourcepack.extras.api.format.item.model.BasicItemModel;
 import eu.pb4.polymer.resourcepack.extras.api.format.item.property.bool.BooleanProperty;
 import eu.pb4.polymer.resourcepack.extras.api.format.item.special.SpecialModel;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.asm.mixin.MixinEnvironment;
 import vectorwing.farmersdelight.FarmersDelight;
 import vectorwing.farmersdelight.common.registry.ModEffects;
 
@@ -25,16 +26,17 @@ public class FarmersDelightPolymerPatch implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("farmers-delight-polymer-patch");
     @Override
     public void onInitialize() {
+        //MixinEnvironment.getCurrentEnvironment().audit();
         PolymerResourcePackUtils.addModAssets("farmersdelight");
         PolymerResourcePackUtils.addModAssets(MOD_ID);
-        ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.of("farmersdelight", "block"));
-        ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.of("farmers-delight-patch", "sgui"), (id, b) -> {
+        ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.fromNamespaceAndPath("farmersdelight", "block"));
+        ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.fromNamespaceAndPath("farmers-delight-patch", "sgui"), (id, b) -> {
             return new ItemAsset(new BasicItemModel(id), new ItemAsset.Properties(true, true));
         });
-        ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.of("farmers-delight-patch", "block"));
+        ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.fromNamespaceAndPath("farmers-delight-patch", "block"));
 
-        PolymerSyncedObject.setSyncedObject(Registries.STATUS_EFFECT, ModEffects.COMFORT.value(), (s, c) -> null);
-        PolymerSyncedObject.setSyncedObject(Registries.STATUS_EFFECT, ModEffects.NOURISHMENT.value(), (s, c) -> null);
+        PolymerSyncedObject.setSyncedObject(BuiltInRegistries.MOB_EFFECT, ModEffects.COMFORT.value(), (s, c) -> null);
+        PolymerSyncedObject.setSyncedObject(BuiltInRegistries.MOB_EFFECT, ModEffects.NOURISHMENT.value(), (s, c) -> null);
 
         BooleanProperty.TYPES.put(FarmersDelight.res("skillet/is_cooking"), SkilletCookingConditionalItemModelProperty.MAP_CODEC);
         SpecialModel.TYPES.put(FarmersDelight.res("skillet"), SkilletSpecialModel.CODEC);
@@ -45,6 +47,6 @@ public class FarmersDelightPolymerPatch implements ModInitializer {
     }
 
     public static Identifier id(String path) {
-        return Identifier.of("farmers-delight-patch", path);
+        return Identifier.fromNamespaceAndPath("farmers-delight-patch", path);
     }
 }

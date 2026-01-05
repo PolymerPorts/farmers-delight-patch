@@ -7,11 +7,11 @@ import eu.pb4.polydex.api.v1.recipe.AbstractRecipePolydexPage;
 import eu.pb4.polydex.api.v1.recipe.PageBuilder;
 import eu.pb4.polydex.api.v1.recipe.PolydexEntry;
 import eu.pb4.polydex.api.v1.recipe.PolydexStack;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 import vectorwing.farmersdelight.common.crafting.CuttingBoardRecipe;
@@ -21,11 +21,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CuttingBoardRecipePage extends AbstractRecipePolydexPage<CuttingBoardRecipe> {
-    private static final ItemStack ICON = ModItems.CUTTING_BOARD.get().getDefaultStack();
+    private static final ItemStack ICON = ModItems.CUTTING_BOARD.get().getDefaultInstance();
 
     private final List<PolydexStack<ItemStack>> outputs;
 
-    public CuttingBoardRecipePage(RecipeEntry<CuttingBoardRecipe> recipe) {
+    public CuttingBoardRecipePage(RecipeHolder<CuttingBoardRecipe> recipe) {
         super(recipe);
 
         var results = recipe.value().getRollableResults();
@@ -37,7 +37,7 @@ public class CuttingBoardRecipePage extends AbstractRecipePolydexPage<CuttingBoa
     }
 
     @Override
-    public @Nullable Text texture(ServerPlayerEntity player) {
+    public @Nullable Component texture(ServerPlayer player) {
         return PolydexTextures.CUTTING_BOARD;
     }
 
@@ -66,12 +66,12 @@ public class CuttingBoardRecipePage extends AbstractRecipePolydexPage<CuttingBoa
     }
 
     @Override
-    public ItemStack typeIcon(ServerPlayerEntity serverPlayerEntity) {
+    public ItemStack typeIcon(ServerPlayer serverPlayerEntity) {
         return ICON;
     }
 
     @Override
-    public void createPage(@Nullable PolydexEntry polydexEntry, ServerPlayerEntity serverPlayerEntity, PageBuilder pageBuilder) {
+    public void createPage(@Nullable PolydexEntry polydexEntry, ServerPlayer serverPlayerEntity, PageBuilder pageBuilder) {
         pageBuilder.setIngredient(2, 1, this.recipe.getInput());
 
         pageBuilder.setOutput(6, 2, this.outputs.toArray(PolydexStack[]::new));

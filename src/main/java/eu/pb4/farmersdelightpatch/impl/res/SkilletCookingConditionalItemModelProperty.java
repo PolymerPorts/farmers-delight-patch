@@ -2,7 +2,7 @@ package eu.pb4.farmersdelightpatch.impl.res;
 
 import com.mojang.serialization.MapCodec;
 import eu.pb4.polymer.resourcepack.extras.api.format.item.property.bool.BooleanProperty;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.ItemStack;
 import vectorwing.farmersdelight.common.registry.ModDataComponents;
 
 public class SkilletCookingConditionalItemModelProperty implements BooleanProperty {

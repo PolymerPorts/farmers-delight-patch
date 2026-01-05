@@ -1,14 +1,12 @@
 package eu.pb4.farmersdelightpatch.mixin.mod;
 
 import eu.pb4.polymer.core.api.block.PolymerBlockUtils;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntity;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.block.entity.SignBlockEntity;
-import net.minecraft.network.listener.ClientPlayPacketListener;
-import net.minecraft.network.packet.Packet;
-import net.minecraft.network.packet.s2c.play.BlockEntityUpdateS2CPacket;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import vectorwing.farmersdelight.common.block.entity.CanvasSignBlockEntity;
 import vectorwing.farmersdelight.common.block.entity.HangingCanvasSignBlockEntity;
@@ -20,7 +18,7 @@ public class HangingCanvasSignBlockEntityMixin extends BlockEntity {
     }
 
     @Override
-    public Packet<ClientPlayPacketListener> toUpdatePacket() {
-        return PolymerBlockUtils.createBlockEntityPacket(this.pos, BlockEntityType.HANGING_SIGN, this.toInitialChunkDataNbt(this.world.getRegistryManager()));
+    public Packet<ClientGamePacketListener> getUpdatePacket() {
+        return PolymerBlockUtils.createBlockEntityPacket(this.worldPosition, BlockEntityType.HANGING_SIGN, this.getUpdateTag(this.level.registryAccess()));
     }
 }

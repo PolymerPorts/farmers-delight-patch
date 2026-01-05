@@ -3,11 +3,11 @@ package eu.pb4.farmersdelightpatch.mixin.mod;
 import eu.pb4.factorytools.api.block.BlockEntityExtraListener;
 import eu.pb4.farmersdelightpatch.impl.model.CuttingBoardModel;
 import eu.pb4.polymer.virtualentity.api.attachment.BlockAwareAttachment;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -50,8 +50,8 @@ public abstract class CuttingBoardBlockEntityMixin extends SyncedBlockEntity imp
     }
 
     @Override
-    public void onListenerUpdate(WorldChunk worldChunk) {
-        var holder = BlockAwareAttachment.get(worldChunk, this.pos);
+    public void onListenerUpdate(LevelChunk worldChunk) {
+        var holder = BlockAwareAttachment.get(worldChunk, this.worldPosition);
         if (holder != null && holder.holder() instanceof CuttingBoardModel model) {
             this.model = model;
             this.model.setItem(this.inventory.getStackInSlot(0), this.isItemCarvingBoard());

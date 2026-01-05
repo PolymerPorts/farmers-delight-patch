@@ -3,18 +3,17 @@ package eu.pb4.farmersdelightpatch.impl.res;
 import eu.pb4.farmersdelightpatch.impl.polydex.PolydexTextures;
 import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.Text;
-
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.network.chat.Component;
+import net.minecraft.world.item.ItemStack;
 
 import static eu.pb4.farmersdelightpatch.impl.res.UiResourceCreator.*;
 
 public class GuiTextures {
-    public static final Function<Text, Text> COOKING_POT = background("cooking_pot");
+    public static final Function<Component, Component> COOKING_POT = background("cooking_pot");
     public static final Supplier<GuiElementBuilder> EMPTY_BUILDER = icon16("empty");
     public static final Supplier<GuiElementBuilder> HEATED = icon16("heated");
     public static final GuiElement EMPTY = EMPTY_BUILDER.get().hideTooltip().build();
@@ -37,9 +36,9 @@ public class GuiTextures {
             return elements[Math.min((int) Math.ceil(progress * elements.length), elements.length - 1)];
         }
 
-        public ItemStack getNamed(float progress, Text text) {
+        public ItemStack getNamed(float progress, Component text) {
             var base = withTooltip[Math.min((int) (progress * withTooltip.length), withTooltip.length - 1)].copy();
-            base.set(DataComponentTypes.ITEM_NAME, text);
+            base.set(DataComponents.ITEM_NAME, text);
             return base;
         }
 

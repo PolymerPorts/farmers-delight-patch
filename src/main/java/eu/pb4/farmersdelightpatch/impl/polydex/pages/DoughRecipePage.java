@@ -3,14 +3,11 @@ package eu.pb4.farmersdelightpatch.impl.polydex.pages;
 import eu.pb4.farmersdelightpatch.impl.polydex.PolydexTextures;
 import eu.pb4.polydex.api.v1.recipe.*;
 import eu.pb4.polydex.impl.book.view.crafting.AbstractCraftingRecipePage;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.recipe.Ingredient;
-import net.minecraft.recipe.RecipeEntry;
-import net.minecraft.recipe.display.SlotDisplay;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.RecipeHolder;
+import net.minecraft.world.item.crafting.display.SlotDisplay;
 import org.jetbrains.annotations.Nullable;
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 import vectorwing.farmersdelight.common.crafting.DoughRecipe;
@@ -22,7 +19,7 @@ public class DoughRecipePage extends AbstractCraftingRecipePage<DoughRecipe> {
 
     private final List<PolydexIngredient<?>> ingredients;
 
-    public DoughRecipePage(RecipeEntry<DoughRecipe> recipe) {
+    public DoughRecipePage(RecipeHolder<DoughRecipe> recipe) {
         super(recipe);
         this.ingredients = List.of(
                 PolydexStack.of(Items.WHEAT),
@@ -39,7 +36,7 @@ public class DoughRecipePage extends AbstractCraftingRecipePage<DoughRecipe> {
             return new SlotDisplay.ItemSlotDisplay(Items.WATER_BUCKET);
         }
 
-        return SlotDisplay.EmptySlotDisplay.INSTANCE;
+        return SlotDisplay.Empty.INSTANCE;
     }
 
     @Override
@@ -49,6 +46,6 @@ public class DoughRecipePage extends AbstractCraftingRecipePage<DoughRecipe> {
 
     @Override
     public ItemStack getOutput(@Nullable PolydexEntry polydexEntry, MinecraftServer minecraftServer) {
-        return ModItems.WHEAT_DOUGH.get().getDefaultStack();
+        return ModItems.WHEAT_DOUGH.get().getDefaultInstance();
     }
 }

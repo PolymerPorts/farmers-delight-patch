@@ -6,24 +6,24 @@ import eu.pb4.farmersdelightpatch.impl.res.UiResourceCreator;
 import eu.pb4.polydex.api.v1.recipe.AbstractRecipePolydexPage;
 import eu.pb4.polydex.api.v1.recipe.PageBuilder;
 import eu.pb4.polydex.api.v1.recipe.PolydexEntry;
-import net.minecraft.item.ItemStack;
-import net.minecraft.recipe.RecipeEntry;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeHolder;
 import org.jetbrains.annotations.Nullable;
 import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
 public class CookingPotRecipePage extends AbstractRecipePolydexPage<CookingPotRecipe> {
-    private static final ItemStack ICON = ModItems.COOKING_POT.get().getDefaultStack();
+    private static final ItemStack ICON = ModItems.COOKING_POT.get().getDefaultInstance();
 
-    public CookingPotRecipePage(RecipeEntry<CookingPotRecipe> recipe) {
+    public CookingPotRecipePage(RecipeHolder<CookingPotRecipe> recipe) {
         super(recipe);
     }
 
     @Override
-    public @Nullable Text texture(ServerPlayerEntity player) {
+    public @Nullable Component texture(ServerPlayer player) {
         return PolydexTextures.COOKING_POT;
     }
 
@@ -33,12 +33,12 @@ public class CookingPotRecipePage extends AbstractRecipePolydexPage<CookingPotRe
     }
 
     @Override
-    public ItemStack typeIcon(ServerPlayerEntity serverPlayerEntity) {
+    public ItemStack typeIcon(ServerPlayer serverPlayerEntity) {
         return ICON;
     }
 
     @Override
-    public void createPage(@Nullable PolydexEntry polydexEntry, ServerPlayerEntity serverPlayerEntity, PageBuilder pageBuilder) {
+    public void createPage(@Nullable PolydexEntry polydexEntry, ServerPlayer serverPlayerEntity, PageBuilder pageBuilder) {
         int i = 0;
         for (var item : this.recipe.input()) {
             pageBuilder.setIngredient(i % 3 + 1, i / 3 + 1, item);

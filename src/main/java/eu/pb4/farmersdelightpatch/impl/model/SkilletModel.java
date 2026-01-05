@@ -3,15 +3,11 @@ package eu.pb4.farmersdelightpatch.impl.model;
 import eu.pb4.factorytools.api.block.model.generic.BlockStateModel;
 import eu.pb4.factorytools.api.virtualentity.ItemDisplayElementUtil;
 import eu.pb4.polymer.virtualentity.api.elements.ItemDisplayElement;
-import net.minecraft.block.BlockState;
-import net.minecraft.item.HoeItem;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.TridentItem;
-import net.minecraft.registry.tag.ItemTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.math.random.Random;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import vectorwing.farmersdelight.common.block.CuttingBoardBlock;
@@ -20,14 +16,14 @@ public class SkilletModel extends BlockStateModel {
     private final ItemDisplayElement[] item = new ItemDisplayElement[5];
     public SkilletModel(BlockState state, BlockPos pos) {
         super(state, pos, 3);
-        var random = Random.create(187);
+        var random = RandomSource.create(187);
         for (int i = 0; i < 5; i++) {
             var item = this.item[i] = ItemDisplayElementUtil.createSimple();
             item.setScale(new Vector3f(0.5f));
             float xOffset = (random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
             float zOffset = (random.nextFloat() * 2.0F - 1.0F) * 0.15F * 0.5F;
 
-            item.setOffset(new Vec3d(xOffset, -6.5f / 16 + 0.03 * (i + 1), zOffset));
+            item.setOffset(new Vec3(xOffset, -6.5f / 16 + 0.03 * (i + 1), zOffset));
             item.setPitch(-90);
         }
         this.applyUpdates(state, pos);
@@ -39,14 +35,14 @@ public class SkilletModel extends BlockStateModel {
     @Override
     protected void applyUpdates(BlockState blockState, BlockPos pos) {
         for (var item : this.item) {
-            item.setYaw(blockState.get(CuttingBoardBlock.FACING).getPositiveHorizontalDegrees());
+            item.setYaw(blockState.getValue(CuttingBoardBlock.FACING).toYRot());
         }
         super.applyUpdates(blockState, pos);
     }
 
 
     public void setItem(ItemStack stack) {
-        if (ItemStack.areEqual(stack, this.item[0].getItem())) {
+        if (ItemStack.matches(stack, this.item[0].getItem())) {
             return;
         }
 

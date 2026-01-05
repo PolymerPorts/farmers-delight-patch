@@ -4,14 +4,13 @@ import eu.pb4.factorytools.api.block.BlockEntityExtraListener;
 import eu.pb4.farmersdelightpatch.impl.model.CuttingBoardModel;
 import eu.pb4.farmersdelightpatch.impl.model.SkilletModel;
 import eu.pb4.polymer.virtualentity.api.attachment.BlockAwareAttachment;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.item.ItemStack;
-import net.minecraft.particle.ParticleEffect;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.world.chunk.WorldChunk;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.chunk.LevelChunk;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,7 +30,7 @@ import vectorwing.farmersdelight.refabricated.inventory.ItemStackHandler;
 public abstract class SkilletBlockEntityMixin extends SyncedBlockEntity implements BlockEntityExtraListener {
     @Shadow @Final private ItemStackHandler inventory;
 
-    @Shadow public static void animationTick(World level, BlockPos pos, BlockState state, SkilletBlockEntity skillet) {};
+    @Shadow public static void animationTick(Level level, BlockPos pos, BlockState state, SkilletBlockEntity skillet) {};
 
     @Unique
     @Nullable
@@ -50,8 +49,8 @@ public abstract class SkilletBlockEntityMixin extends SyncedBlockEntity implemen
     }
 
     @Override
-    public void onListenerUpdate(WorldChunk worldChunk) {
-        var holder = BlockAwareAttachment.get(worldChunk, this.pos);
+    public void onListenerUpdate(LevelChunk worldChunk) {
+        var holder = BlockAwareAttachment.get(worldChunk, this.worldPosition);
         if (holder != null && holder.holder() instanceof SkilletModel model) {
             this.model = model;
             this.model.setItem(this.inventory.getStackInSlot(0));
@@ -59,12 +58,12 @@ public abstract class SkilletBlockEntityMixin extends SyncedBlockEntity implemen
     }
 
     @Inject(method = "cookingTick", at = @At("HEAD"))
-    private static void reanimateThatTick(ServerWorld level, BlockPos pos, BlockState state, SkilletBlockEntity skillet, CallbackInfo ci) {
+    private static void reanimateThatTick(ServerLevel level, BlockPos pos, BlockState state, SkilletBlockEntity skillet, CallbackInfo ci) {
         animationTick(level, pos, state, skillet);
     }
 
-    @Redirect(method = "animationTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/World;addParticleClient(Lnet/minecraft/particle/ParticleEffect;DDDDDD)V"))
-    private static void fixParticles(World instance, ParticleEffect parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
-        ((ServerWorld) instance).spawnParticles(parameters, x, y, z, 0, velocityX, velocityY, velocityZ, 1);
+    @Redirect(method = "animationTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V"))
+    private static void fixParticles(Level instance, ParticleOptions parameters, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+        ((ServerLevel) instance).sendParticles(parameters, x, y, z, 0, velocityX, velocityY, velocityZ, 1);
     }
 }

@@ -1,8 +1,8 @@
 package eu.pb4.farmersdelightpatch.mixin.mod;
 
 import eu.pb4.factorytools.api.block.FactoryBlock;
-import eu.pb4.factorytools.api.block.model.generic.BlockStateModelManager;
 import eu.pb4.factorytools.api.block.model.SignModel;
+import eu.pb4.factorytools.api.block.model.generic.BlockStateModelManager;
 import eu.pb4.farmersdelightpatch.impl.block.BaseFactoryBlock;
 import eu.pb4.farmersdelightpatch.impl.block.StateCopyFactoryBlock;
 import eu.pb4.farmersdelightpatch.impl.block.WaterloggableFactoryBlock;
@@ -22,23 +22,24 @@ import eu.pb4.polymer.core.api.other.PolymerConsumeEffect;
 import eu.pb4.polymer.core.api.other.PolymerSoundEvent;
 import eu.pb4.polymer.core.api.utils.PolymerSyncedObject;
 import eu.pb4.polymer.virtualentity.api.BlockWithElementHolder;
-import net.minecraft.block.Block;
-import net.minecraft.block.Waterloggable;
-import net.minecraft.block.entity.BlockEntityType;
-import net.minecraft.component.ComponentType;
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.effect.StatusEffect;
-import net.minecraft.item.*;
-import net.minecraft.item.consume.ConsumeEffect;
-import net.minecraft.particle.ParticleType;
-import net.minecraft.particle.ParticleTypes;
-import net.minecraft.recipe.book.RecipeBookCategories;
-import net.minecraft.recipe.book.RecipeBookCategory;
-import net.minecraft.recipe.display.RecipeDisplay;
-import net.minecraft.registry.Registries;
-import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.sound.SoundEvent;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponentType;
+import net.minecraft.core.particles.ParticleType;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.consume_effects.ConsumeEffect;
+import net.minecraft.world.item.crafting.RecipeBookCategories;
+import net.minecraft.world.item.crafting.RecipeBookCategory;
+import net.minecraft.world.item.crafting.display.RecipeDisplay;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -85,19 +86,21 @@ public class RegUtilsMixin {
         } else if (block instanceof CanvasSign canvasSign) {
             if (name.endsWith("wall_hanging_canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.HANGING_WALL_SIGN_DARK : StateCopyFactoryBlock.HANGING_WALL_SIGN;
-                SignModel.setModel(block, id("block/" + name));
+                SignModel.setSolidModel(block, id("block/" + name));
             } else if (name.endsWith("hanging_canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.HANGING_SIGN_DARK : StateCopyFactoryBlock.HANGING_SIGN;
-                SignModel.setModel(block, id("block/" + name));
+                SignModel.setSolidModel(block, id("block/" + name));
             } else if (name.endsWith("canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.SIGN_DARK : StateCopyFactoryBlock.SIGN;
-                SignModel.setModel(block, id("block/" + name));
+                SignModel.setSolidModel(block, id("block/" + name));
             } else if (name.endsWith("canvas_wall_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.WALL_SIGN_DARK : StateCopyFactoryBlock.WALL_SIGN;
-                SignModel.setModel(block, id("block/" + name));
+                SignModel.setSolidModel(block, id("block/" + name));
             } else {
                 polymerBlock = BaseFactoryBlock.SAPLING;
             }
+        } else if (block instanceof FeastBlock || block instanceof PieBlock) {
+            polymerBlock = WaterloggableFactoryBlock.CAMPFIRE;
         } else if (block instanceof SafetyNetBlock) {
             polymerBlock = WaterloggableFactoryBlock.TOP_TRAPDOOR;
         } else if (block instanceof WildRiceBlock) {
@@ -106,15 +109,15 @@ public class RegUtilsMixin {
             polymerBlock = BaseFactoryBlock.VINE;
         } else if (block instanceof RiceBlock) {
             polymerBlock = BaseFactoryBlock.KELP;
-        } else if (block.getDefaultState().getCollisionShape(PolymerCommonUtils.getFakeWorld(), BlockPos.ORIGIN).isEmpty()) {
+        } else if (block.defaultBlockState().getCollisionShape(PolymerCommonUtils.getFakeWorld(), BlockPos.ZERO).isEmpty()) {
             polymerBlock = BaseFactoryBlock.SAPLING;
         } else {
-            polymerBlock = block instanceof Waterloggable ? WaterloggableFactoryBlock.BARRIER : BaseFactoryBlock.BARRIER;
+            polymerBlock = block instanceof SimpleWaterloggedBlock ? WaterloggableFactoryBlock.BARRIER : BaseFactoryBlock.BARRIER;
         }
 
         PolymerBlock.registerOverlay(block, polymerBlock);
         BlockWithElementHolder.registerOverlay(block, polymerBlock);
-        BlockStateModelManager.addBlock(FarmersDelight.res(name), block);
+        BlockStateModelManager.addSolidBlock(FarmersDelight.res(name), block);
 
     }
 
@@ -124,16 +127,16 @@ public class RegUtilsMixin {
     }
 
     @Inject(method = "regEffect", at = @At("RETURN"))
-    private static void onStatusEffectRegistered(String name, Supplier<StatusEffect> supplier, CallbackInfoReturnable<Supplier<StatusEffect>> cir) {
-        PolymerSyncedObject.setSyncedObject(Registries.STATUS_EFFECT, cir.getReturnValue().get(), (s, c) -> null);
+    private static void onStatusEffectRegistered(String name, Supplier<MobEffect> supplier, CallbackInfoReturnable<Supplier<MobEffect>> cir) {
+        PolymerSyncedObject.setSyncedObject(BuiltInRegistries.MOB_EFFECT, cir.getReturnValue().get(), (s, c) -> null);
     }
 
     @Inject(method = "regBlockEntity", at = @At("RETURN"))
     private static void onBlockEntityTypeRegistered(String name, Supplier<BlockEntityType<?>> supplier, CallbackInfoReturnable<Supplier<BlockEntityType<?>>> cir) {
         if (name.equals("canvas_sign")) {
-            PolymerSyncedObject.setSyncedObject(Registries.BLOCK_ENTITY_TYPE, cir.getReturnValue().get(), (a, b) -> BlockEntityType.SIGN);
+            PolymerSyncedObject.setSyncedObject(BuiltInRegistries.BLOCK_ENTITY_TYPE, cir.getReturnValue().get(), (a, b) -> BlockEntityType.SIGN);
         } else if (name.equals("hanging_canvas_sign")) {
-            PolymerSyncedObject.setSyncedObject(Registries.BLOCK_ENTITY_TYPE, cir.getReturnValue().get(), (a, b) -> BlockEntityType.HANGING_SIGN);
+            PolymerSyncedObject.setSyncedObject(BuiltInRegistries.BLOCK_ENTITY_TYPE, cir.getReturnValue().get(), (a, b) -> BlockEntityType.HANGING_SIGN);
         }
         PolymerBlockUtils.registerBlockEntity(cir.getReturnValue().get());
     }
@@ -144,17 +147,17 @@ public class RegUtilsMixin {
     }
 
     @Inject(method = "regComponent(Ljava/lang/String;Ljava/util/function/Supplier;)Ljava/util/function/Supplier;", at = @At("RETURN"))
-    private static void onComponentRegistered(String name, Supplier<ComponentType<?>> supplier, CallbackInfoReturnable<Supplier<ComponentType<?>>> cir) {
+    private static void onComponentRegistered(String name, Supplier<DataComponentType<?>> supplier, CallbackInfoReturnable<Supplier<DataComponentType<?>>> cir) {
         PolymerComponent.registerDataComponent(cir.getReturnValue().get());
     }
 
     @Inject(method = "regComponent(Ljava/lang/String;Ljava/util/function/Consumer;)Ljava/util/function/Supplier;", at = @At("RETURN"))
-    private static void onComponentRegistered2(String name, Consumer<ComponentType.Builder<?>> stuff, CallbackInfoReturnable<Supplier<ComponentType<?>>> cir) {
+    private static void onComponentRegistered2(String name, Consumer<DataComponentType.Builder<?>> stuff, CallbackInfoReturnable<Supplier<DataComponentType<?>>> cir) {
         PolymerComponent.registerDataComponent(cir.getReturnValue().get());
     }
 
     @Inject(method = "regEnchComponent", at = @At("RETURN"))
-    private static void onEnchComponentRegistered(String name, Consumer<ComponentType.Builder<?>> stuff, CallbackInfoReturnable<Supplier<ComponentType<?>>> cir) {
+    private static void onEnchComponentRegistered(String name, Consumer<DataComponentType.Builder<?>> stuff, CallbackInfoReturnable<Supplier<DataComponentType<?>>> cir) {
         PolymerComponent.registerEnchantmentEffectComponent(cir.getReturnValue().get());
     }
 
@@ -166,13 +169,13 @@ public class RegUtilsMixin {
     @Inject(method = "regParticle", at = @At("HEAD"), cancellable = true)
     private static void onParticleRegistered(String name, Supplier<ParticleType<?>> supplier, CallbackInfoReturnable<Supplier<ParticleType<?>>> cir) {
         cir.setReturnValue(switch (name) {
-            case "star" -> (Supplier<ParticleType<?>>)() -> ParticleTypes.FIREWORK;
+            case "star" -> (Supplier<ParticleType<?>>) () -> ParticleTypes.FIREWORK;
             case null, default -> (Supplier<ParticleType<?>>) () -> ParticleTypes.POOF;
         });
     }
 
     @Inject(method = "regTab", at = @At("HEAD"), cancellable = true)
-    private static void onItemGroupRegistered(String name, Supplier<ItemGroup> supplier, CallbackInfoReturnable<Supplier<ItemGroup>> cir) {
+    private static void onItemGroupRegistered(String name, Supplier<CreativeModeTab> supplier, CallbackInfoReturnable<Supplier<CreativeModeTab>> cir) {
         var group = supplier.get();
         PolymerItemGroupUtils.registerPolymerItemGroup(FarmersDelight.res(name), group);
         cir.setReturnValue(() -> group);
@@ -184,12 +187,12 @@ public class RegUtilsMixin {
     }
 
     @Inject(method = "regRecipeDisplay", at = @At("HEAD"), cancellable = true)
-    private static void onRecipeDisplayRegistered(String name, Supplier<RecipeDisplay.Serializer<?>> supplier, CallbackInfoReturnable<Supplier<RecipeDisplay.Serializer<?>>> cir) {
+    private static void onRecipeDisplayRegistered(String name, Supplier<RecipeDisplay.Type<?>> supplier, CallbackInfoReturnable<Supplier<RecipeDisplay.Type<?>>> cir) {
         cir.setReturnValue(() -> null);
     }
 
     @Inject(method = "regMenu", at = @At("HEAD"), cancellable = true)
-    private static void onMenuRegistered(String name, Supplier<ScreenHandlerType<?>> supplier, CallbackInfoReturnable<Supplier<ScreenHandlerType<?>>> cir) {
+    private static void onMenuRegistered(String name, Supplier<MenuType<?>> supplier, CallbackInfoReturnable<Supplier<MenuType<?>>> cir) {
         var val = supplier.get();
         cir.setReturnValue(() -> val);
     }

@@ -12,14 +12,14 @@ import eu.pb4.polymer.resourcepack.extras.api.format.item.model.*;
 import eu.pb4.polymer.resourcepack.extras.api.format.item.property.bool.CustomModelDataFlagProperty;
 import eu.pb4.polymer.resourcepack.extras.api.format.model.ModelAsset;
 import eu.pb4.polymer.resourcepack.extras.api.format.model.ModelElement;
-import net.minecraft.util.DyeColor;
-import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3d;
 import vectorwing.farmersdelight.FarmersDelight;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 import java.util.Optional;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.phys.Vec3;
 
 import static eu.pb4.farmersdelightpatch.impl.FarmersDelightPolymerPatch.id;
 
@@ -30,8 +30,8 @@ public class ResourcePackGenerator {
     }
 
     private static void build(ResourcePackBuilder builder) {
-        final var signExtension = new Vec3d(0.04, 0.04, 0.04);
-        final var safetyNetOffset = new Vec3d(0, 7, 0);
+        final var signExtension = new Vec3(0.04, 0.04, 0.04);
+        final var safetyNetOffset = new Vec3(0, 7, 0);
 
         builder.addWriteConverter(((string, bytes) -> {
             if (string.equals("assets/farmersdelight/items/skillet.json")) {
@@ -88,7 +88,7 @@ public class ResourcePackGenerator {
 
         createCanvasModel(builder, "", "", atlas);
         for (var color : DyeColor.values()) {
-            createCanvasModel(builder, "_" + color.asString(), color.asString() + "_", atlas);
+            createCanvasModel(builder, "_" + color.getSerializedName(), color.getSerializedName() + "_", atlas);
         }
 
         builder.addData("assets/minecraft/atlases/blocks.json", atlas.build());
@@ -102,16 +102,16 @@ public class ResourcePackGenerator {
         atlas.add(new SingleAtlasSource(textureHanging, Optional.empty()));
 
         builder.addData(AssetPaths.blockModel(id(prefix + "canvas_sign")), ModelAsset.builder()
-                .parent(Identifier.of("factorytools", "block_sign/template_sign"))
+                .parent(Identifier.fromNamespaceAndPath("factorytools", "block_sign/template_sign"))
                 .texture("sign", textureRegular.toString()).build());
         builder.addData(AssetPaths.blockModel(id(prefix + "canvas_wall_sign")), ModelAsset.builder()
-                .parent(Identifier.of("factorytools", "block_sign/template_wall_sign"))
+                .parent(Identifier.fromNamespaceAndPath("factorytools", "block_sign/template_wall_sign"))
                 .texture("sign", textureRegular.toString()).build());
         builder.addData(AssetPaths.blockModel(id(prefix + "hanging_canvas_sign")), ModelAsset.builder()
-                .parent(Identifier.of("factorytools", "block_sign/template_hanging_sign"))
+                .parent(Identifier.fromNamespaceAndPath("factorytools", "block_sign/template_hanging_sign"))
                 .texture("sign", textureHanging.toString()).build());
         builder.addData(AssetPaths.blockModel(id(prefix + "wall_hanging_canvas_sign")), ModelAsset.builder()
-                .parent(Identifier.of("factorytools", "block_sign/template_wall_hanging_sign"))
+                .parent(Identifier.fromNamespaceAndPath("factorytools", "block_sign/template_wall_hanging_sign"))
                 .texture("sign", textureHanging.toString()).build());
     }
 }

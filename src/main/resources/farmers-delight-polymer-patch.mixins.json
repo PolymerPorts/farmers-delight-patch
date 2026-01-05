@@ -16,6 +16,7 @@
     "mod.HangingCanvasSignBlockEntityMixin",
     "mod.ModBlocksMixin",
     "mod.RegUtilsMixin",
+    "mod.RottenTomatoItemMixin",
     "mod.SafetyNetBlockMixin",
     "mod.SkilledItemMixin",
     "mod.SkilletBlockEntityMixin",

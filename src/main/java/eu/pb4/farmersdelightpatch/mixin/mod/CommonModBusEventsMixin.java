@@ -2,13 +2,10 @@ package eu.pb4.farmersdelightpatch.mixin.mod;
 
 import eu.pb4.polymer.core.api.item.PolymerItemUtils;
 import net.fabricmc.fabric.api.item.v1.DefaultItemComponentEvents;
-import net.minecraft.component.DataComponentTypes;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
-import net.minecraft.util.Identifier;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
+import net.minecraft.world.item.Item;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -26,10 +23,10 @@ public class CommonModBusEventsMixin {
     private static void forceResyncData(DefaultItemComponentEvents.ModifyContext context, CallbackInfo ci) {
         if (Configuration.ENABLE_STACKABLE_SOUP_ITEMS.get()) {
             Configuration.SOUP_ITEM_LIST.get().forEach((key) -> {
-                var k = Identifier.of(key);
+                var k = Identifier.parse(key);
                 if (k.getNamespace().equals(Identifier.DEFAULT_NAMESPACE)) {
-                    Item item = Registries.ITEM.get(k);
-                    PolymerItemUtils.syncDefaultComponent(item, DataComponentTypes.MAX_STACK_SIZE);
+                    Item item = BuiltInRegistries.ITEM.getValue(k);
+                    PolymerItemUtils.syncDefaultComponent(item, DataComponents.MAX_STACK_SIZE);
                 }
             });
         }

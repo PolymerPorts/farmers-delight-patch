@@ -1,19 +1,19 @@
 package eu.pb4.farmersdelightpatch.mixin.mod;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.block.BlockWithEntity;
-import net.minecraft.block.ShapeContext;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.world.BlockView;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Overwrite;
 import vectorwing.farmersdelight.common.block.CookingPotBlock;
 import vectorwing.farmersdelight.common.block.SkilletBlock;
 
 @Mixin(SkilletBlock.class)
-public abstract class SkilletBlockMixin extends BlockWithEntity {
-    protected SkilletBlockMixin(Settings settings) {
+public abstract class SkilletBlockMixin extends BaseEntityBlock {
+    protected SkilletBlockMixin(Properties settings) {
         super(settings);
     }
 
@@ -22,7 +22,7 @@ public abstract class SkilletBlockMixin extends BlockWithEntity {
      * @reason Nuh uh
      */
     @Overwrite
-    public VoxelShape getCollisionShape(BlockState state, BlockView level, BlockPos pos, ShapeContext context) {
+    public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return super.getCollisionShape(state, level, pos, context);
     }
 }

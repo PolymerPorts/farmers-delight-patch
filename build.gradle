@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.13.+'
+	id 'fabric-loom' version '1.14.+'
 	id 'maven-publish'
 	id "com.modrinth.minotaur" version "2.+"
 }
@@ -60,25 +60,25 @@ repositories {
 dependencies {
 	// To change the versions see the gradle.properties file
 	minecraft "com.mojang:minecraft:${project.minecraft_version}"
-	mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+	mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 
 	//modImplementation("vectorwing:FarmersDelight:1.21.8-3.2.5+refabricated") {
-	modImplementation("maven.modrinth:farmers-delight-refabricated:1.21.11-3.4.2") {
+	modImplementation("maven.modrinth:farmers-delight-refabricated:1.21.11-3.4.3") {
 		exclude(group: "net.fabricmc")
 	}
 
-	modImplementation include('eu.pb4:factorytools:0.9.0+1.21.11')
-	modImplementation include('eu.pb4:sgui:1.11.0+1.21.9')
-	modImplementation 'eu.pb4:polymer-core:0.15.0-beta.4+1.21.11-rc2'
-	modImplementation 'eu.pb4:polymer-blocks:0.15.0-beta.4+1.21.11-rc2'
-	modImplementation 'eu.pb4:polymer-resource-pack:0.15.0-beta.4+1.21.11-rc2'
-	modImplementation 'eu.pb4:polymer-resource-pack-extras:0.15.0-beta.4+1.21.11-rc2'
-	modImplementation 'eu.pb4:polymer-autohost:0.15.0-beta.4+1.21.11-rc2'
-	modImplementation 'eu.pb4:polymer-virtual-entity:0.15.0-beta.4+1.21.11-rc2'
+	modImplementation include('eu.pb4:factorytools:0.9.3+1.21.11')
+	modImplementation include('eu.pb4:sgui:1.12.0+1.21.11')
+	modImplementation 'eu.pb4:polymer-core:0.15.1+1.21.11'
+	modImplementation 'eu.pb4:polymer-blocks:0.15.1+1.21.11'
+	modImplementation 'eu.pb4:polymer-resource-pack:0.15.1+1.21.11'
+	modImplementation 'eu.pb4:polymer-resource-pack-extras:0.15.1+1.21.11'
+	modImplementation 'eu.pb4:polymer-autohost:0.15.1+1.21.11'
+	modImplementation 'eu.pb4:polymer-virtual-entity:0.15.1+1.21.11'
 
 	modCompileOnly 'maven.modrinth:polydex:1.7.0+1.21.9-rc1'
 
