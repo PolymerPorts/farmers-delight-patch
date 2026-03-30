@@ -1,5 +1,6 @@
 package eu.pb4.farmersdelightpatch.mixin.mod;
 
+import eu.pb4.polymer.common.api.PolymerCommonUtils;
 import net.minecraft.network.protocol.game.ClientboundContainerSetSlotPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvent;
@@ -16,13 +17,14 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import vectorwing.farmersdelight.common.item.SkilletItem;
-import xyz.nucleoid.packettweaker.PacketContext;
+import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 
 @Mixin(SkilletItem.class)
 public class SkilledItemMixin {
     @Redirect(method = "getBarWidth", at = @At(value = "INVOKE", target = "Lvectorwing/farmersdelight/common/item/SkilletItem;getClientPlayerHack()Lnet/minecraft/world/entity/player/Player;"))
     private Player thereIsNoHack() {
-        return PacketContext.get().getPlayer();
+        var ctx = PacketContext.get();
+        return ctx != null ? PolymerCommonUtils.getPlayer(ctx) : null;
     }
 
     @Redirect(method = "onUseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;isClientSide()Z"))

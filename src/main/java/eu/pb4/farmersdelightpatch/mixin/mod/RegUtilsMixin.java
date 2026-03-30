@@ -16,7 +16,7 @@ import eu.pb4.polymer.core.api.block.PolymerBlock;
 import eu.pb4.polymer.core.api.block.PolymerBlockUtils;
 import eu.pb4.polymer.core.api.entity.PolymerEntityUtils;
 import eu.pb4.polymer.core.api.item.PolymerItem;
-import eu.pb4.polymer.core.api.item.PolymerItemGroupUtils;
+import eu.pb4.polymer.core.api.item.PolymerCreativeModeTabUtils;
 import eu.pb4.polymer.core.api.other.PolymerComponent;
 import eu.pb4.polymer.core.api.other.PolymerConsumeEffect;
 import eu.pb4.polymer.core.api.other.PolymerSoundEvent;
@@ -86,16 +86,16 @@ public class RegUtilsMixin {
         } else if (block instanceof CanvasSign canvasSign) {
             if (name.endsWith("wall_hanging_canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.HANGING_WALL_SIGN_DARK : StateCopyFactoryBlock.HANGING_WALL_SIGN;
-                SignModel.setSolidModel(block, id("block/" + name));
+                SignModel.setModel(block, id("block/" + name));
             } else if (name.endsWith("hanging_canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.HANGING_SIGN_DARK : StateCopyFactoryBlock.HANGING_SIGN;
-                SignModel.setSolidModel(block, id("block/" + name));
+                SignModel.setModel(block, id("block/" + name));
             } else if (name.endsWith("canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.SIGN_DARK : StateCopyFactoryBlock.SIGN;
-                SignModel.setSolidModel(block, id("block/" + name));
+                SignModel.setModel(block, id("block/" + name));
             } else if (name.endsWith("canvas_wall_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.WALL_SIGN_DARK : StateCopyFactoryBlock.WALL_SIGN;
-                SignModel.setSolidModel(block, id("block/" + name));
+                SignModel.setModel(block, id("block/" + name));
             } else {
                 polymerBlock = BaseFactoryBlock.SAPLING;
             }
@@ -117,7 +117,7 @@ public class RegUtilsMixin {
 
         PolymerBlock.registerOverlay(block, polymerBlock);
         BlockWithElementHolder.registerOverlay(block, polymerBlock);
-        BlockStateModelManager.addSolidBlock(FarmersDelight.res(name), block);
+        BlockStateModelManager.addBlock(FarmersDelight.id(name), block);
 
     }
 
@@ -177,7 +177,7 @@ public class RegUtilsMixin {
     @Inject(method = "regTab", at = @At("HEAD"), cancellable = true)
     private static void onItemGroupRegistered(String name, Supplier<CreativeModeTab> supplier, CallbackInfoReturnable<Supplier<CreativeModeTab>> cir) {
         var group = supplier.get();
-        PolymerItemGroupUtils.registerPolymerItemGroup(FarmersDelight.res(name), group);
+        PolymerCreativeModeTabUtils.registerPolymerCreativeModeTab(FarmersDelight.id(name), group);
         cir.setReturnValue(() -> group);
     }
 

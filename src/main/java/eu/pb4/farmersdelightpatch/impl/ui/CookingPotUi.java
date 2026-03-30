@@ -4,7 +4,7 @@ import eu.pb4.farmersdelightpatch.impl.FarmersDelightPolymerPatch;
 import eu.pb4.farmersdelightpatch.impl.polydex.PolydexCompat;
 import eu.pb4.farmersdelightpatch.impl.res.GuiTextures;
 import eu.pb4.sgui.api.elements.GuiElementBuilder;
-import eu.pb4.sgui.api.elements.GuiElementInterface;
+import eu.pb4.sgui.api.elements.GuiElement;
 import eu.pb4.sgui.api.gui.SimpleGui;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -27,13 +27,13 @@ public class CookingPotUi extends SimpleGui {
 
         for (int row = 0; row < 2; ++row) {
             for (int column = 0; column < 3; ++column) {
-                this.setSlotRedirect(column + row * 9 + 1, wrapped.slots.get(slot++));
+                this.setSlot(column + row * 9 + 1, wrapped.slots.get(slot++));
             }
         }
 
         this.setSlot(6, new CookingPotMealDisplay(this.wrapped, (CookingPotMealSlot) wrapped.slots.get(slot++)));
-        this.setSlotRedirect(5 + 9 * 2, wrapped.slots.get(slot++));
-        this.setSlotRedirect(7 + 9 * 2, wrapped.slots.get(slot++));
+        this.setSlot(5 + 9 * 2, wrapped.slots.get(slot++));
+        this.setSlot(7 + 9 * 2, wrapped.slots.get(slot++));
         this.updateState();
 
         this.setSlot(2 * 9, PolydexCompat.getButton(ModRecipeTypes.COOKING.get()));
@@ -48,8 +48,8 @@ public class CookingPotUi extends SimpleGui {
     }
 
     @Override
-    public void onScreenHandlerClosed() {
-        super.onScreenHandlerClosed();
+    public void onRemoved() {
+        super.onRemoved();
         this.wrapped.removed(this.player);
     }
 
@@ -60,7 +60,7 @@ public class CookingPotUi extends SimpleGui {
 
     }
 
-    private record CookingPotMealDisplay(CookingPotMenu wrapped, CookingPotMealSlot slot) implements GuiElementInterface {
+    private record CookingPotMealDisplay(CookingPotMenu wrapped, CookingPotMealSlot slot) implements GuiElement {
         @Override
         public ItemStack getItemStack() {
             var mealStack = slot.getItem();
@@ -73,6 +73,11 @@ public class CookingPotUi extends SimpleGui {
             b.setMaxCount(99);
 
             return b.asStack();
+        }
+
+        @Override
+        public ClickCallback getGuiCallback() {
+            return GuiElement.EMPTY_CALLBACK;
         }
     }
 }

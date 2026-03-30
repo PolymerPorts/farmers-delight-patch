@@ -9,7 +9,7 @@ import eu.pb4.polymer.blocks.api.PolymerBlockResourceUtils;
 import eu.pb4.polymer.blocks.api.PolymerTexturedBlock;
 import eu.pb4.polymer.virtualentity.api.ElementHolder;
 import org.jetbrains.annotations.Nullable;
-import xyz.nucleoid.packettweaker.PacketContext;
+import net.fabricmc.fabric.api.networking.v1.context.PacketContext;
 
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -24,17 +24,17 @@ public record WaterloggableFactoryBlock(BlockState clientState, BlockState water
     public static final WaterloggableFactoryBlock BARRIER = new WaterloggableFactoryBlock(Blocks.BARRIER.defaultBlockState(),
             Blocks.BARRIER.defaultBlockState().setValue(BarrierBlock.WATERLOGGED, true), false,
             BlockStateModel::midRange);
-    public static final WaterloggableFactoryBlock TOP_TRAPDOOR = new WaterloggableFactoryBlock(PolymerBlockResourceUtils.requestEmpty(BlockModelType.TOP_TRAPDOOR),
-            PolymerBlockResourceUtils.requestEmpty(BlockModelType.TOP_TRAPDOOR_WATERLOGGED), false,
+    public static final WaterloggableFactoryBlock TOP_TRAPDOOR = new WaterloggableFactoryBlock(PolymerBlockResourceUtils.requestEmpty(BlockModelType.TRAPDOOR_TOP),
+            PolymerBlockResourceUtils.requestEmpty(BlockModelType.TRAPDOOR_TOP_WATERLOGGED), false,
             BlockStateModel::midRange);
 
-    public static final WaterloggableFactoryBlock BOTTOM_TRAPDOOR = new WaterloggableFactoryBlock(PolymerBlockResourceUtils.requestEmpty(BlockModelType.BOTTOM_TRAPDOOR),
-            PolymerBlockResourceUtils.requestEmpty(BlockModelType.BOTTOM_TRAPDOOR_WATERLOGGED), false,
+    public static final WaterloggableFactoryBlock BOTTOM_TRAPDOOR = new WaterloggableFactoryBlock(PolymerBlockResourceUtils.requestEmpty(BlockModelType.TRAPDOOR_BOTTOM),
+            PolymerBlockResourceUtils.requestEmpty(BlockModelType.TRAPDOOR_BOTTOM_WATERLOGGED), false,
             BlockStateModel::midRange);
 
     public static final WaterloggableFactoryBlock PLANT = new WaterloggableFactoryBlock(
-            PolymerBlockResourceUtils.requestEmpty(BlockModelType.PLANT_BLOCK),
-            PolymerBlockResourceUtils.requestEmpty(BlockModelType.KELP_BLOCK),
+            PolymerBlockResourceUtils.requestEmpty(BlockModelType.PLANT),
+            PolymerBlockResourceUtils.requestEmpty(BlockModelType.KELP),
             false, BlockStateModel::midRange);
 
     public static final WaterloggableFactoryBlock CAMPFIRE = new WaterloggableFactoryBlock(PolymerBlockResourceUtils.requestEmpty(BlockModelType.CAMPFIRE),

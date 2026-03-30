@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CuttingBoardRecipePage extends AbstractRecipePolydexPage<CuttingBoardRecipe> {
-    private static final ItemStack ICON = ModItems.CUTTING_BOARD.get().getDefaultInstance();
-
     private final List<PolydexStack<ItemStack>> outputs;
 
     public CuttingBoardRecipePage(RecipeHolder<CuttingBoardRecipe> recipe) {
@@ -32,7 +30,7 @@ public class CuttingBoardRecipePage extends AbstractRecipePolydexPage<CuttingBoa
 
         this.outputs = new ArrayList<>(results.size());
         for (var result : results) {
-            this.outputs.add(PolydexStack.of(result.stack(), result.chance()));
+            this.outputs.add(PolydexStack.of(result.stack().create(), result.chance()));
         }
     }
 
@@ -67,7 +65,7 @@ public class CuttingBoardRecipePage extends AbstractRecipePolydexPage<CuttingBoa
 
     @Override
     public ItemStack typeIcon(ServerPlayer serverPlayerEntity) {
-        return ICON;
+        return ModItems.CUTTING_BOARD.get().getDefaultInstance();
     }
 
     @Override

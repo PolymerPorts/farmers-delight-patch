@@ -16,8 +16,6 @@ import vectorwing.farmersdelight.common.crafting.CookingPotRecipe;
 import vectorwing.farmersdelight.common.registry.ModItems;
 
 public class CookingPotRecipePage extends AbstractRecipePolydexPage<CookingPotRecipe> {
-    private static final ItemStack ICON = ModItems.COOKING_POT.get().getDefaultInstance();
-
     public CookingPotRecipePage(RecipeHolder<CookingPotRecipe> recipe) {
         super(recipe);
     }
@@ -29,12 +27,12 @@ public class CookingPotRecipePage extends AbstractRecipePolydexPage<CookingPotRe
 
     @Override
     public ItemStack getOutput(@Nullable PolydexEntry polydexEntry, MinecraftServer minecraftServer) {
-        return this.recipe.result();
+        return this.recipe.result().create();
     }
 
     @Override
     public ItemStack typeIcon(ServerPlayer serverPlayerEntity) {
-        return ICON;
+        return ModItems.COOKING_POT.get().getDefaultInstance();
     }
 
     @Override
@@ -45,8 +43,8 @@ public class CookingPotRecipePage extends AbstractRecipePolydexPage<CookingPotRe
             i++;
         }
 
-        pageBuilder.setIngredient(5, 3, this.recipe.container());
-        pageBuilder.setOutput(6, 1, this.recipe.result().copy());
-        pageBuilder.setOutput(7, 3, this.recipe.result().copy());
+        pageBuilder.setIngredient(5, 3, this.recipe.container().create());
+        pageBuilder.setOutput(6, 1, this.recipe.result().create());
+        pageBuilder.setOutput(7, 3, this.recipe.result().create());
     }
 }

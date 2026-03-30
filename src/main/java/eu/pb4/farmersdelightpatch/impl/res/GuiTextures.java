@@ -6,6 +6,8 @@ import eu.pb4.sgui.api.elements.GuiElementBuilder;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.Supplier;
+
+import eu.pb4.sgui.api.elements.GuiElementBuilderCreator;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -16,7 +18,7 @@ public class GuiTextures {
     public static final Function<Component, Component> COOKING_POT = background("cooking_pot");
     public static final Supplier<GuiElementBuilder> EMPTY_BUILDER = icon16("empty");
     public static final Supplier<GuiElementBuilder> HEATED = icon16("heated");
-    public static final GuiElement EMPTY = EMPTY_BUILDER.get().hideTooltip().build();
+    public static final GuiElementBuilder EMPTY = EMPTY_BUILDER.get().hideTooltip();
     public static final Supplier<GuiElementBuilder> POLYDEX_BUTTON = icon32("polydex");
     public static final Progress PROGRESS_COOKING_POT = Progress.createHorizontal32Right("progress_cooking_pot", 4, 26, false);
     public static final char SPACE_1 = UiResourceCreator.space(1);
@@ -27,31 +29,31 @@ public class GuiTextures {
         PolydexTextures.register();
     }
 
-    public record Progress(GuiElement[] elements, ItemStack[] withTooltip) {
+    public record Progress(GuiElementBuilder[] elements, GuiElementBuilder[] withTooltip) {
         public GuiElement get(float progress) {
-            return elements[Math.min((int) (progress * elements.length), elements.length - 1)];
+            return elements[Math.min((int) (progress * elements.length), elements.length - 1)].build();
         }
 
         public GuiElement getCeil(float progress) {
-            return elements[Math.min((int) Math.ceil(progress * elements.length), elements.length - 1)];
+            return elements[Math.min((int) Math.ceil(progress * elements.length), elements.length - 1)].build();
         }
 
         public ItemStack getNamed(float progress, Component text) {
-            var base = withTooltip[Math.min((int) (progress * withTooltip.length), withTooltip.length - 1)].copy();
+            var base = withTooltip[Math.min((int) (progress * withTooltip.length), withTooltip.length - 1)].asStack();
             base.set(DataComponents.ITEM_NAME, text);
             return base;
         }
 
         private static Progress create(int size, IntFunction<GuiElementBuilder> function) {
-            var elements = new GuiElement[size + 1];
-            var withTooltip = new ItemStack[size + 1];
+            var elements = new GuiElementBuilder[size + 1];
+            var withTooltip = new GuiElementBuilder[size + 1];
 
             elements[0] = EMPTY;
-            withTooltip[0] = EMPTY.getItemStack().copy();
+            withTooltip[0] = EMPTY;
 
             for (var i = 1; i <= size; i++) {
-                elements[i] = function.apply(i - 1).hideTooltip().build();
-                withTooltip[i] = function.apply(i - 1).asStack();
+                elements[i] = function.apply(i - 1).hideTooltip();
+                withTooltip[i] = function.apply(i - 1);
             }
             return new Progress(elements, withTooltip);
         }
