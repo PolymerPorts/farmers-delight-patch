@@ -3,9 +3,7 @@ package eu.pb4.farmersdelightpatch.mixin.mod;
 import eu.pb4.factorytools.api.block.FactoryBlock;
 import eu.pb4.factorytools.api.block.model.SignModel;
 import eu.pb4.factorytools.api.block.model.generic.BlockStateModelManager;
-import eu.pb4.farmersdelightpatch.impl.block.BaseFactoryBlock;
-import eu.pb4.farmersdelightpatch.impl.block.StateCopyFactoryBlock;
-import eu.pb4.farmersdelightpatch.impl.block.WaterloggableFactoryBlock;
+import eu.pb4.farmersdelightpatch.impl.block.*;
 import eu.pb4.farmersdelightpatch.impl.item.PolyBaseItem;
 import eu.pb4.farmersdelightpatch.impl.item.PolySkilletItem;
 import eu.pb4.farmersdelightpatch.impl.model.CuttingBoardModel;
@@ -37,8 +35,7 @@ import net.minecraft.world.item.consume_effects.ConsumeEffect;
 import net.minecraft.world.item.crafting.RecipeBookCategories;
 import net.minecraft.world.item.crafting.RecipeBookCategory;
 import net.minecraft.world.item.crafting.display.RecipeDisplay;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -81,6 +78,10 @@ public class RegUtilsMixin {
             polymerBlock = WaterloggableFactoryBlock.BOTTOM_TRAPDOOR.withModel(SkilletModel::new);
         } else if (block instanceof StoveBlock) {
             polymerBlock = BaseFactoryBlock.BARRIER.withModel(StoveModel::new).withTick(true);
+        } else if (block instanceof FenceGateBlock) {
+            polymerBlock = PolymerFenceGateBlock.INSTANCE;
+        } else if (block instanceof CrossCollisionBlock) {
+            polymerBlock = MapPolymerBlock.ofFenceLike(block);
         } else if (name.equals("half_tatami_mat") || name.equals("full_tatami_mat")) {
             polymerBlock = BaseFactoryBlock.BOTTOM_TRAPDOOR;
         } else if (block instanceof CanvasSign canvasSign) {

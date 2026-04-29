@@ -59,7 +59,7 @@ public class SkilletModel extends BlockStateModel {
 
     }
 
-    protected int getModelCount(ItemStack stack) {
+    public static int getModelCount(ItemStack stack) {
         if (stack.getCount() > 48) {
             return 5;
         } else if (stack.getCount() > 32) {
