@@ -7,7 +7,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 
 
 public class PolydexCompat {
-    private static final boolean IS_PRESENT = FabricLoader.getInstance().isModLoaded("polydex2");
+    private static final boolean IS_PRESENT = FabricLoader.getInstance().isModLoaded("polydex");
 
 
     public static void register() {
