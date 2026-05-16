@@ -78,7 +78,9 @@ public class RegUtilsMixin {
             polymerBlock = WaterloggableFactoryBlock.BOTTOM_TRAPDOOR.withModel(SkilletModel::new);
         } else if (block instanceof StoveBlock) {
             polymerBlock = BaseFactoryBlock.BARRIER.withModel(StoveModel::new).withTick(true);
-        } else if (block instanceof FenceGateBlock) {
+        } else if (block instanceof RopeBlock) {
+            polymerBlock = BaseFactoryBlock.VINE;
+        }else if (block instanceof FenceGateBlock) {
             polymerBlock = PolymerFenceGateBlock.INSTANCE;
         } else if (block instanceof CrossCollisionBlock) {
             polymerBlock = MapPolymerBlock.ofFenceLike(block);
@@ -106,8 +108,6 @@ public class RegUtilsMixin {
             polymerBlock = WaterloggableFactoryBlock.TOP_TRAPDOOR;
         } else if (block instanceof WildRiceBlock) {
             polymerBlock = WaterloggableFactoryBlock.PLANT;
-        } else if (block instanceof RopeBlock) {
-            polymerBlock = BaseFactoryBlock.VINE;
         } else if (block instanceof RiceBlock) {
             polymerBlock = BaseFactoryBlock.KELP;
         } else if (block.defaultBlockState().getCollisionShape(PolymerCommonUtils.getFakeWorld(), BlockPos.ZERO).isEmpty()) {
