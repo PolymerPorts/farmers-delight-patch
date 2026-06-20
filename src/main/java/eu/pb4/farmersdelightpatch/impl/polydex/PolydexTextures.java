@@ -16,8 +16,8 @@ public class PolydexTextures {
     static {
         var t1 = polydexBackground("1");
         var t2 = polydexBackground("2");
-        COOKING_POT = t1.getA();
-        CUTTING_BOARD = t1.getB();
-        DECOMPOSITION = t2.getA();
+        COOKING_POT = t1.getFirst();
+        CUTTING_BOARD = t1.getSecond();
+        DECOMPOSITION = t2.getFirst();
     }
 }

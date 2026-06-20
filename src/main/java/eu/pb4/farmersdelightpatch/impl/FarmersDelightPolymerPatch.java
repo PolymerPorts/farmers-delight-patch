@@ -24,7 +24,7 @@ public class FarmersDelightPolymerPatch implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("farmers-delight-polymer-patch");
     @Override
     public void onInitialize() {
-        //MixinEnvironment.getCurrentEnvironment().audit();
+        MixinEnvironment.getCurrentEnvironment().audit();
         PolymerResourcePackUtils.addModAssets("farmersdelight");
         PolymerResourcePackUtils.addModAssets(MOD_ID);
         ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.fromNamespaceAndPath("farmersdelight", "block"));

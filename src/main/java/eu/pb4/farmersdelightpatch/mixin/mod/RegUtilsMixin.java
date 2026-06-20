@@ -25,9 +25,11 @@ import net.minecraft.core.component.DataComponentType;
 import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EntityTypes;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
@@ -54,7 +56,9 @@ import static eu.pb4.farmersdelightpatch.impl.FarmersDelightPolymerPatch.id;
 @Mixin(RegUtils.class)
 public class RegUtilsMixin {
     @Inject(method = "regItem", at = @At("RETURN"))
-    private static void onItemRegistered(String name, Supplier<Item> supplier, CallbackInfoReturnable<Supplier<Item>> cir) {
+    private static void onItemRegistered(ResourceKey<Block> key, Supplier<Item> supplier, CallbackInfoReturnable<Supplier<Item>> cir) {
+        var name = key.identifier().getPath();
+
         PolymerItem polymerItem;
         if (name.equals("skillet")) {
             polymerItem = new PolySkilletItem();
@@ -66,9 +70,11 @@ public class RegUtilsMixin {
     }
 
     @Inject(method = "regBlock", at = @At("RETURN"))
-    private static void onBlockRegistered(String name, Supplier<Block> supplier, CallbackInfoReturnable<Supplier<Block>> cir) {
+    private static void onBlockRegistered(ResourceKey<Block> key, Supplier<Block> supplier, CallbackInfoReturnable<Supplier<Block>> cir) {
         var block = cir.getReturnValue().get();
         FactoryBlock polymerBlock;
+
+        var name = key.identifier().getPath();
 
         if (name.equals("canvas_rug")) {
             polymerBlock = BaseFactoryBlock.BOTTOM_TRAPDOOR;
@@ -123,8 +129,8 @@ public class RegUtilsMixin {
     }
 
     @Inject(method = "regEntity", at = @At("RETURN"))
-    private static void onEntityTypeRegistered(String name, Supplier<EntityType<?>> supplier, CallbackInfoReturnable<Supplier<EntityType<?>>> cir) {
-        PolymerEntityUtils.registerOverlay(cir.getReturnValue().get(), (e) -> (context) -> EntityType.SNOWBALL);
+    private static void onEntityTypeRegistered(ResourceKey<EntityType<?>> key, Supplier<?> supplier, CallbackInfoReturnable<Supplier<EntityType<?>>> cir) {
+        PolymerEntityUtils.registerOverlay(cir.getReturnValue().get(), (e) -> (context) -> EntityTypes.SNOWBALL);
     }
 
     @Inject(method = "regEffect", at = @At("RETURN"))
@@ -134,11 +140,6 @@ public class RegUtilsMixin {
 
     @Inject(method = "regBlockEntity", at = @At("RETURN"))
     private static void onBlockEntityTypeRegistered(String name, Supplier<BlockEntityType<?>> supplier, CallbackInfoReturnable<Supplier<BlockEntityType<?>>> cir) {
-        if (name.equals("canvas_sign")) {
-            PolymerSyncedObject.setSyncedObject(BuiltInRegistries.BLOCK_ENTITY_TYPE, cir.getReturnValue().get(), (a, b) -> BlockEntityType.SIGN);
-        } else if (name.equals("hanging_canvas_sign")) {
-            PolymerSyncedObject.setSyncedObject(BuiltInRegistries.BLOCK_ENTITY_TYPE, cir.getReturnValue().get(), (a, b) -> BlockEntityType.HANGING_SIGN);
-        }
         PolymerBlockUtils.registerBlockEntity(cir.getReturnValue().get());
     }
 

@@ -19,16 +19,5 @@ import net.minecraft.world.phys.Vec3;
 
 @Mixin(SafetyNetBlock.class)
 public class SafetyNetBlockMixin {
-    @Inject(method = "bounceEntity", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;setDeltaMovement(DDD)V", shift = At.Shift.AFTER))
-    private void bounceThePlayer(Entity entityIn, CallbackInfo ci, @Local double entityWeightOffset) {
-        if (entityIn instanceof ServerPlayer player) {
-            player.connection.send(new ClientboundExplodePacket(Vec3.ZERO.add(0, -99999, 0),
-                0f, 0,
-                Optional.of(new Vec3(0, (player.connection.latency() > 50 || player.onGround() ? 0 : -player.getKnownMovement().y) + player.getDeltaMovement().y, 0)),
-                ParticleTypes.BUBBLE_POP,
-                BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.EMPTY),
-                WeightedList.of()
-            ));
-        }
-    }
+
 }

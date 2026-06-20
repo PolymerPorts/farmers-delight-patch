@@ -2,6 +2,7 @@ package eu.pb4.farmersdelightpatch.impl.res;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+import com.mojang.datafixers.util.Pair;
 import eu.pb4.factorytools.api.util.LazyItemStack;
 import eu.pb4.factorytools.api.virtualentity.ItemDisplayElementUtil;
 import eu.pb4.polymer.resourcepack.api.AssetPaths;
@@ -18,7 +19,6 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.FontDescription;
 import net.minecraft.network.chat.Style;
 import net.minecraft.resources.Identifier;
-import net.minecraft.util.Tuple;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemStackTemplate;
@@ -195,7 +195,7 @@ public class UiResourceCreator {
         return c;
     }
 
-    public static Tuple<Component, Component> polydexBackground(String path) {
+    public static Pair<Component, Component> polydexBackground(String path) {
         var c = (character++);
         var d = (character++);
 
@@ -203,7 +203,7 @@ public class UiResourceCreator {
 
         FONT_TEXTURES.add(texture);
 
-        return new Tuple<>(
+        return new Pair<>(
                 Component.literal(Character.toString(c)).setStyle(STYLE),
                 Component.literal(Character.toString(d)).setStyle(STYLE)
         );

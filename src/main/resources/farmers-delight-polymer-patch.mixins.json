@@ -3,9 +3,8 @@
   "package": "eu.pb4.farmersdelightpatch.mixin",
   "compatibilityLevel": "JAVA_21",
   "mixins": [
+    "EntityMixin",
     "ServerPlayerEntityMixin",
-    "mod.BlockEntityDataMixin",
-    "mod.CanvasSignBlockEntityMixin",
     "mod.CanvasSignBlockMixin",
     "mod.CommonModBusEventsMixin",
     "mod.ConfigurationMixin",
@@ -13,7 +12,6 @@
     "mod.CookingPotBlockMixin",
     "mod.CuttingBoardBlockEntityMixin",
     "mod.FDRecipeMixin",
-    "mod.HangingCanvasSignBlockEntityMixin",
     "mod.ModBlocksMixin",
     "mod.RegUtilsMixin",
     "mod.RottenTomatoItemMixin",
