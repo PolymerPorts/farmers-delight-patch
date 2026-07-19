@@ -24,14 +24,14 @@ public class FarmersDelightPolymerPatch implements ModInitializer {
     public static final Logger LOGGER = LoggerFactory.getLogger("farmers-delight-polymer-patch");
     @Override
     public void onInitialize() {
-        MixinEnvironment.getCurrentEnvironment().audit();
+        //MixinEnvironment.getCurrentEnvironment().audit();
         PolymerResourcePackUtils.addModAssets("farmersdelight");
         PolymerResourcePackUtils.addModAssets(MOD_ID);
         ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.fromNamespaceAndPath("farmersdelight", "block"));
         ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.fromNamespaceAndPath("farmers-delight-patch", "sgui"), (id, b) -> {
             return new ItemAsset(new BasicItemModel(id), new ItemAsset.Properties(true, true));
         });
-        ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.fromNamespaceAndPath("farmers-delight-patch", "block"));
+        //ResourcePackExtras.forDefault().addBridgedModelsFolder(Identifier.fromNamespaceAndPath("farmers-delight-patch", "block"));
 
         PolymerSyncedObject.setSyncedObject(BuiltInRegistries.MOB_EFFECT, ModEffects.COMFORT.value(), (s, c) -> null);
         PolymerSyncedObject.setSyncedObject(BuiltInRegistries.MOB_EFFECT, ModEffects.NOURISHMENT.value(), (s, c) -> null);

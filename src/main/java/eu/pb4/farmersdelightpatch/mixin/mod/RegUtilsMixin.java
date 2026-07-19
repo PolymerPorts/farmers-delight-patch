@@ -17,6 +17,7 @@ import eu.pb4.polymer.core.api.item.PolymerItem;
 import eu.pb4.polymer.core.api.item.PolymerCreativeModeTabUtils;
 import eu.pb4.polymer.core.api.other.PolymerComponent;
 import eu.pb4.polymer.core.api.other.PolymerConsumeEffect;
+import eu.pb4.polymer.core.api.other.PolymerParticleType;
 import eu.pb4.polymer.core.api.other.PolymerSoundEvent;
 import eu.pb4.polymer.core.api.utils.PolymerSyncedObject;
 import eu.pb4.polymer.virtualentity.api.BlockWithElementHolder;
@@ -95,16 +96,12 @@ public class RegUtilsMixin {
         } else if (block instanceof CanvasSign canvasSign) {
             if (name.endsWith("wall_hanging_canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.HANGING_WALL_SIGN_DARK : StateCopyFactoryBlock.HANGING_WALL_SIGN;
-                SignModel.setModel(block, id("block/" + name));
             } else if (name.endsWith("hanging_canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.HANGING_SIGN_DARK : StateCopyFactoryBlock.HANGING_SIGN;
-                SignModel.setModel(block, id("block/" + name));
             } else if (name.endsWith("canvas_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.SIGN_DARK : StateCopyFactoryBlock.SIGN;
-                SignModel.setModel(block, id("block/" + name));
             } else if (name.endsWith("canvas_wall_sign")) {
                 polymerBlock = canvasSign.isDarkBackground() ? StateCopyFactoryBlock.WALL_SIGN_DARK : StateCopyFactoryBlock.WALL_SIGN;
-                SignModel.setModel(block, id("block/" + name));
             } else {
                 polymerBlock = BaseFactoryBlock.SAPLING;
             }
@@ -168,11 +165,11 @@ public class RegUtilsMixin {
         PolymerConsumeEffect.registerConsumeEffect(cir.getReturnValue().get());
     }
 
-    @Inject(method = "regParticle", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "regParticle", at = @At("RETURN"))
     private static void onParticleRegistered(String name, Supplier<ParticleType<?>> supplier, CallbackInfoReturnable<Supplier<ParticleType<?>>> cir) {
-        cir.setReturnValue(switch (name) {
-            case "star" -> (Supplier<ParticleType<?>>) () -> ParticleTypes.FIREWORK;
-            case null, default -> (Supplier<ParticleType<?>>) () -> ParticleTypes.POOF;
+        PolymerParticleType.setOverlay(cir.getReturnValue().get(), switch (name) {
+            case "star" -> (_, _) -> ParticleTypes.FIREWORK;
+            case null, default -> (_, _) -> ParticleTypes.POOF;
         });
     }
 

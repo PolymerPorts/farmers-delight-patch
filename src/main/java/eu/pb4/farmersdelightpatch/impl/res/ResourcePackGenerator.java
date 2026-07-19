@@ -17,22 +17,37 @@ import vectorwing.farmersdelight.FarmersDelight;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Objects;
-import java.util.Optional;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.DyeColor;
+import java.util.Set;
+
 import net.minecraft.world.phys.Vec3;
 
 import static eu.pb4.farmersdelightpatch.impl.FarmersDelightPolymerPatch.id;
 
 public class ResourcePackGenerator {
+    private static final Set<String> EXPANDABLE = Set.of("wall", "fence", "slab", "stairs", "pressure_plate", "button", "sign");
+
     public static void setup() {
-        PolymerResourcePackUtils.RESOURCE_PACK_CREATION_EVENT.register(ResourcePackGenerator::build);
+        PolymerResourcePackUtils.RESOURCE_PACK_AFTER_INITIAL_CREATION_EVENT.register(ResourcePackGenerator::build);
         UiResourceCreator.setup();
     }
 
     private static void build(ResourcePackBuilder builder) {
-        final var signExtension = new Vec3(0.04, 0.04, 0.04);
+        final var expansion = new Vec3(0.08, 0.08, 0.08);
         final var safetyNetOffset = new Vec3(0, 7, 0);
+
+        builder.forEachResource((string, resource) -> {
+            for (var expandable : EXPANDABLE) {
+                if (string.contains(expandable) && string.startsWith("assets/farmersdelight/models/block/")) {
+                    var asset = ModelAsset.fromJson(Objects.requireNonNull(resource.asString()));
+                    if (asset.parent().isPresent()) {
+                        var parentId = asset.parent().get();
+                        var parentAsset = ModelAsset.fromJson(new String(Objects.requireNonNull(builder.getDataOrSource(AssetPaths.model(parentId) + ".json")), StandardCharsets.UTF_8));
+                        builder.addData(AssetPaths.model("farmers-delight-patch", parentId.getPath()) + ".json", ModelModifiers.expandModel(parentAsset, expansion));
+                    }
+                }
+            }
+        });
+
 
         builder.addResourceConverter(((string, resource) -> {
             if (string.equals("assets/farmersdelight/items/skillet.json")) {
@@ -52,18 +67,20 @@ public class ResourcePackGenerator {
                     return model;
                 };
                 return PackResource.fromAsset(new ItemAsset(replacer[0].modifyDeep(EmptyItemModel.INSTANCE, asset.model()), new ItemAsset.Properties(false, false)));
-            } else if (string.startsWith("assets/farmers-delight-patch/models/block/template_")) {
-                var asset = ModelAsset.fromJson(resource.asString());
-                return PackResource.fromAsset(new ModelAsset(asset.parent(), asset.elements().map(x -> x.stream()
-                        .map(element -> new ModelElement(element.from().subtract(signExtension), element.to().add(signExtension),
-                                element.faces(), element.rotation(), element.shade(), element.lightEmission())
-                        ).toList()), asset.textures(), asset.display(), asset.guiLight(), asset.ambientOcclusion()));
             } else if (string.equals("assets/farmersdelight/models/block/safety_net.json")) {
                 var asset = ModelAsset.fromJson(resource.asString());
                 return PackResource.fromAsset(new ModelAsset(asset.parent(), asset.elements().map(x -> x.stream()
                         .map(element -> new ModelElement(element.from().add(safetyNetOffset), element.to().add(safetyNetOffset),
                                 element.faces(), element.rotation(), element.shade(), element.lightEmission())
                         ).toList()), asset.textures(), asset.display(), asset.guiLight(), asset.ambientOcclusion()));
+            }
+            if (!string.contains("_uvlock_")) {
+                for (var expandable : EXPANDABLE) {
+                    if (string.contains(expandable) && string.startsWith("assets/farmersdelight/models/block/")) {
+                        var asset = ModelAsset.fromJson(Objects.requireNonNull(resource.asString()));
+                        return PackResource.fromAsset(new ModelAsset(asset.parent().map(x -> id(x.getPath())), asset.elements(), asset.textures(), asset.display(), asset.guiLight(), asset.ambientOcclusion()));
+                    }
+                }
             }
             return resource;
         }));
@@ -88,33 +105,6 @@ public class ResourcePackGenerator {
 
         var atlas = AtlasAsset.builder();
 
-
-        createCanvasModel(builder, "", "", atlas);
-        for (var color : DyeColor.values()) {
-            createCanvasModel(builder, "_" + color.getSerializedName(), color.getSerializedName() + "_", atlas);
-        }
-
         builder.addData("assets/minecraft/atlases/blocks.json", atlas.build());
-    }
-
-    private static void createCanvasModel(ResourcePackBuilder builder, String suffix, String prefix, AtlasAsset.Builder atlas) {
-        var textureRegular = FarmersDelight.id("entity/signs/canvas" + suffix);
-        var textureHanging = FarmersDelight.id("entity/signs/hanging/canvas" + suffix);
-
-        atlas.add(new SingleAtlasSource(textureRegular, Optional.empty()));
-        atlas.add(new SingleAtlasSource(textureHanging, Optional.empty()));
-
-        builder.addData(AssetPaths.blockModel(id(prefix + "canvas_sign")), ModelAsset.builder()
-                .parent(Identifier.fromNamespaceAndPath("factorytools", "block_sign/template_sign"))
-                .texture("sign", textureRegular).build());
-        builder.addData(AssetPaths.blockModel(id(prefix + "canvas_wall_sign")), ModelAsset.builder()
-                .parent(Identifier.fromNamespaceAndPath("factorytools", "block_sign/template_wall_sign"))
-                .texture("sign", textureRegular).build());
-        builder.addData(AssetPaths.blockModel(id(prefix + "hanging_canvas_sign")), ModelAsset.builder()
-                .parent(Identifier.fromNamespaceAndPath("factorytools", "block_sign/template_hanging_sign"))
-                .texture("sign", textureHanging).build());
-        builder.addData(AssetPaths.blockModel(id(prefix + "wall_hanging_canvas_sign")), ModelAsset.builder()
-                .parent(Identifier.fromNamespaceAndPath("factorytools", "block_sign/template_wall_hanging_sign"))
-                .texture("sign", textureHanging).build());
     }
 }
