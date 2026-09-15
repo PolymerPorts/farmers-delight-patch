@@ -33,6 +33,7 @@ public class ResourcePackGenerator {
 
     private static void build(ResourcePackBuilder builder) {
         final var expansion = new Vec3(0.08, 0.08, 0.08);
+        final var expansionSign = new Vec3(0.04, 0.04, 0.04);
         final var safetyNetOffset = new Vec3(0, 7, 0);
 
         builder.forEachResource((string, resource) -> {
@@ -42,7 +43,8 @@ public class ResourcePackGenerator {
                     if (asset.parent().isPresent()) {
                         var parentId = asset.parent().get();
                         var parentAsset = ModelAsset.fromJson(new String(Objects.requireNonNull(builder.getDataOrSource(AssetPaths.model(parentId) + ".json")), StandardCharsets.UTF_8));
-                        builder.addData(AssetPaths.model("farmers-delight-patch", parentId.getPath()) + ".json", ModelModifiers.expandModel(parentAsset, expansion));
+                        builder.addData(AssetPaths.model("farmers-delight-patch", parentId.getPath()) + ".json",
+                                ModelModifiers.expandModel(parentAsset, parentId.getPath().contains("sign") ? expansionSign : expansion));
                     }
                 }
             }

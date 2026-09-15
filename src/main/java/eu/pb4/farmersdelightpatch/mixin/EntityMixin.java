@@ -32,7 +32,7 @@ public class EntityMixin {
                     Optional.of(new Vec3(0, (player.connection.latency() > 50 || player.onGround() ? 0 : -player.getKnownMovement().y) + player.getDeltaMovement().y, 0)),
                     ParticleTypes.BUBBLE_POP,
                     BuiltInRegistries.SOUND_EVENT.wrapAsHolder(SoundEvents.EMPTY),
-                    WeightedList.of()
+                    WeightedList.of(), false
             ));
         }
     }

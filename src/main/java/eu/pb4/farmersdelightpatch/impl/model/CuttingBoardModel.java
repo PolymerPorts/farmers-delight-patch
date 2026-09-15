@@ -7,7 +7,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.item.HoeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TridentItem;
 import net.minecraft.world.level.block.state.BlockState;
@@ -56,7 +55,7 @@ public class CuttingBoardModel extends BlockStateModel {
             this.item[0].setPitch(0);
             this.item[0].setTranslation(new Vector3f(0, 0.23f * 0.6f, 0));
             float poseAngle;
-            if (!stack.is(ItemTags.PICKAXES) && !(stack.getItem() instanceof HoeItem)) {
+            if (!stack.is(ItemTags.PICKAXES) && !(stack.is(ItemTags.HOES))) {
                 if (stack.getItem() instanceof TridentItem) {
                     poseAngle = 135.0F;
                 } else {

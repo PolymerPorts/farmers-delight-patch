@@ -17,9 +17,10 @@ repositories {
 	// Loom adds the essential maven repositories to download Minecraft and libraries from automatically.
 	// See https://docs.gradle.org/current/userguide/declaring_repositories.html
 	// for more information about repositories.
+
     maven { url "https://api.modrinth.com/maven/" }
 	maven { url 'https://maven.nucleoid.xyz' }
-	maven { url "https://maven.kneelawk.com/releases/" }
+	//maven { url "https://maven.kneelawk.com/releases/" }
 	maven { url "https://maven.isxander.dev/releases" }
 	maven { url "https://jitpack.io" }
 
@@ -60,18 +61,18 @@ dependencies {
 	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
 
 	//implementation("vectorwing:FarmersDelight:1.21.8-3.2.5+refabricated") {
-	implementation("maven.modrinth:farmers-delight-refabricated:26.2-3.6.20") {
+	implementation("maven.modrinth:farmers-delight-refabricated:26.3-3.6.21") {
 		exclude(group: "net.fabricmc")
 	}
 
-	implementation include('eu.pb4:factorytools:0.11.2+26.2')
-	implementation include('eu.pb4:sgui:2.1.0+26.2')
-	implementation 'eu.pb4:polymer-core:0.17.3+26.2'
-	implementation 'eu.pb4:polymer-blocks:0.17.3+26.2'
-	implementation 'eu.pb4:polymer-resource-pack:0.17.3+26.2'
-	implementation 'eu.pb4:polymer-resource-pack-extras:0.17.3+26.2'
-	implementation 'eu.pb4:polymer-autohost:0.17.3+26.2'
-	implementation 'eu.pb4:polymer-virtual-entity:0.17.3+26.2'
+	implementation include('eu.pb4:factorytools:0.12.1+26.3')
+	implementation include('eu.pb4:sgui:2.2.0+26.3')
+	implementation 'eu.pb4:polymer-core:0.18.0+26.3-rc-1'
+	implementation 'eu.pb4:polymer-blocks:0.18.0+26.3-rc-1'
+	implementation 'eu.pb4:polymer-resource-pack:0.18.0+26.3-rc-1'
+	implementation 'eu.pb4:polymer-resource-pack-extras:0.18.0+26.3-rc-1'
+	implementation 'eu.pb4:polymer-autohost:0.18.0+26.3-rc-1'
+	implementation 'eu.pb4:polymer-virtual-entity:0.18.0+26.3-rc-1'
 
 	compileOnly 'maven.modrinth:polydex:1.9.2+26.1-rc-3'
 
